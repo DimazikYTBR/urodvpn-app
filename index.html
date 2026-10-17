@@ -45,7 +45,7 @@ body{min-height:100svh;overflow-x:hidden}
   border:1px solid var(--glass-b);
   overflow:hidden;
 }
-.glass::before{
+.glass::before{ 
   content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(220px circle at var(--mx,30%) var(--my,0%),rgba(255,255,255,.28),transparent 60%);
   opacity:var(--ho,.55);transition:opacity .25s;
@@ -110,8 +110,6 @@ ol{padding:0;margin:0}
 .pay:active{transform:scale(.94)}
 .pay:focus-visible,.plan:focus-visible,.step button:focus-visible{outline:3px solid #fff;outline-offset:3px}
 
-
-
 .mine{padding:20px;margin-top:14px;display:none}
 .mine.show{display:block}
 .mine .head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
@@ -143,7 +141,6 @@ ol{padding:0;margin:0}
 .hdr .sumh{font-weight:800;font-size:14px;padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);white-space:nowrap}
 .hero{transform-origin:50% 0;will-change:transform,opacity}
 
-
 .scrim{position:fixed;inset:0;z-index:20;background:rgba(3,5,12,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s}
 .scrim.on{opacity:1;pointer-events:auto}
 .sheet{position:fixed;left:12px;right:12px;bottom:calc(12px + var(--sab));max-width:496px;margin:0 auto;z-index:21;padding:22px 18px 18px;
@@ -166,6 +163,20 @@ ol{padding:0;margin:0}
 .btn2{display:block;width:100%;margin-top:12px;border:0;cursor:pointer;font:800 16px "Manrope",sans-serif;color:#06101c;padding:16px;border-radius:999px;background:linear-gradient(135deg,#fff,var(--cyan))}
 .btn2.ghost{background:rgba(255,255,255,.12);color:var(--text);border:1px solid rgba(255,255,255,.25)}
 
+.roll{display:inline-flex;align-items:center;line-height:1;transition:transform .5s cubic-bezier(.2,1.6,.3,1),text-shadow .6s,filter .6s;transform-origin:0 60%}
+.roll .col{display:inline-block;height:1em;overflow:hidden;width:.72em;text-align:center;position:relative;
+  -webkit-mask-image:linear-gradient(transparent 0,#000 18%,#000 82%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 18%,#000 82%,transparent 100%)}
+.roll .strip{display:block;will-change:transform;transition:transform .9s cubic-bezier(.16,1.12,.3,1)}
+.roll .strip i{display:block;height:1em;line-height:1;font-style:normal}
+.roll .cur{margin-left:.18em;opacity:.9}
+.roll.up{transform:scale(1.14);text-shadow:0 0 22px rgba(255,122,89,.85)}
+.roll.down{transform:scale(.92);text-shadow:0 0 22px rgba(75,227,168,.85)}
+.roll.new .col{animation:colin .5s cubic-bezier(.2,1.4,.3,1) both}
+@keyframes colin{from{width:0;opacity:0}}
+.bar .sum b.roll{font-size:22px;height:1em}
+.hdr .sumh.roll{font-size:14px;font-weight:800}
+.hdr .sumh.roll .col{width:.66em}
+
 .in{animation:rise .9s cubic-bezier(.2,.9,.2,1) both}
 .in:nth-child(2){animation-delay:.08s}.in:nth-child(3){animation-delay:.16s}
 @keyframes rise{from{opacity:0;transform:translateY(26px) scale(.97);filter:blur(8px)}}
@@ -177,7 +188,7 @@ ol{padding:0;margin:0}
 <div class="bg" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
 
 <header class="glass hdr" id="hdr" aria-hidden="true">
-  <img class="mini" src="logo.jpg" alt="" width="34" height="34"><span class="ttl">УродVPN</span><span class="sumh" id="sumh">79 ₽</span>
+  <img class="mini" src="logo.jpg" alt="" width="34" height="34"><span class="ttl">УродVPN</span><span class="sumh roll" id="sumh" aria-hidden="true"></span>
 </header>
 
 <main class="wrap">
@@ -217,7 +228,7 @@ ol{padding:0;margin:0}
 </main>
 
 <div class="glass bar in" id="bar">
-  <div class="sum"><small id="sumName">100 ГБ · 30 дней</small><b id="sum">79 ₽</b></div>
+  <div class="sum"><small id="sumName">100 ГБ · 30 дней</small><b id="sum" class="roll" aria-live="polite" aria-label="79 ₽"></b></div>
   <button class="pay" id="pay">К оплате</button>
 </div>
 
@@ -232,13 +243,14 @@ ol{padding:0;margin:0}
   var u = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
   if (u && u.first_name) document.getElementById('name').textContent = u.first_name;
 
+  
   var PLANS = [
     {key:'gb100',  name:'100 ГБ',   price:79,  desc:'100 ГБ трафика на 30 дней',                color:'#5ee6ff'},
     {key:'unlim',  name:'Безлимит', price:109, desc:'Без ограничения трафика, 30 дней',          color:'#8b6cff'},
     {key:'family', name:'Я и моя семья', price:169, desc:'Безлимит на 10 устройств, 30 дней', color:'#ff7a59', fixed:10}
   ];
   var DEVICE_PRICE = 5, MAX_DEV = 5, INCLUDED = 1;
-  var API_URL = '';
+  var API_URL = '';   
   var api = {ok:false, prices:null, snap:null};
   var state = {plan:'gb100', dev:1};
 
@@ -261,6 +273,46 @@ ol{padding:0;margin:0}
   function priceOf(p){ var d=p.fixed||state.dev; if (api.prices && api.prices[p.key] && api.prices[p.key][String(d)]!=null) return api.prices[p.key][String(d)]; return p.fixed?p.price:p.price+Math.max(0,state.dev-INCLUDED)*DEVICE_PRICE; }
   function haptic(t){ try{ tg.HapticFeedback.impactOccurred(t); }catch(e){} }
 
+  
+  var CYC=90;                                     
+  function Roller(el){ this.el=el; this.cols=[]; this.value=null; this.t=null; }
+  Roller.prototype.set=function(n){
+    var el=this.el, str=String(n), old=this.value; this.value=n;
+    var instant = old===null, dir = instant?0:(n>old?1:-1);
+    
+    while(this.cols.length>str.length){ var rm=this.cols.shift(); rm.node.remove(); }
+    var added=false;
+    while(this.cols.length<str.length){
+      var node=document.createElement('span'); node.className='col';
+      var strip=document.createElement('span'); strip.className='strip';
+      var h=''; for(var k=0;k<CYC;k++) h+='<i>'+(k%10)+'</i>'; strip.innerHTML=h; node.appendChild(strip);
+      var c={node:node,strip:strip,idx:30,d:0};
+      strip.style.transition='none'; strip.style.transform='translateY(-'+c.idx+'em)';
+      var first=el.querySelector('.col'); el.insertBefore(node, first||el.querySelector('.cur')); this.cols.unshift(c); added=!instant;
+    }
+    for(var i=0;i<str.length;i++){
+      var col=this.cols[i], d=+str.charAt(i); if(d===col.d && !added && !instant && col.idx%10===d) continue;
+      var delta = dir>=0 ? (d-col.d+10)%10 : -((col.d-d+10)%10);
+      if(instant){ col.idx=30+d; }
+      else {
+        if(col.idx<20||col.idx>59){ col.idx = 30 + (col.idx%10); col.strip.style.transition='none'; col.strip.style.transform='translateY(-'+col.idx+'em)'; void col.strip.offsetHeight; }
+        if(delta===0) delta = dir>=0 ? 10 : -10;                 
+        col.idx += delta + (dir>=0 ? 10 : -10);                  
+      }
+      col.d=d;
+      col.strip.style.transition = instant ? 'none' : 'transform '+(0.8+ (str.length-1-i)*0.12)+'s cubic-bezier(.16,1.12,.3,1) '+((str.length-1-i)*0.05)+'s';
+      col.strip.style.transform='translateY(-'+col.idx+'em)';
+    }
+    if(!instant){
+      var self=this; el.classList.remove('up','down'); void el.offsetWidth; el.classList.add(dir>0?'up':'down');
+      clearTimeout(this.t); this.t=setTimeout(function(){ el.classList.remove('up','down'); },650);
+      if(added){ el.classList.add('new'); setTimeout(function(){el.classList.remove('new')},600); }
+    }
+    el.setAttribute('aria-label', n+' ₽');
+  };
+  function mkRoller(id){ var el=document.getElementById(id); el.innerHTML='<span class="cur"> ₽</span>'; return new Roller(el); }
+  var rollBar = mkRoller('sum'), rollHdr = mkRoller('sumh');
+
   var devEl=document.getElementById('dev'), devN=document.getElementById('devN');
   function render(){
     var p = cur();
@@ -273,7 +325,7 @@ ol{padding:0;margin:0}
     devN.textContent = fixed ? p.fixed : state.dev;
     document.getElementById('devTitle').textContent = fixed ? 'Устройства включены' : 'Сколько устройств';
     document.getElementById('devSub').textContent = fixed ? p.fixed+' устройств уже в тарифе' : INCLUDED+' входит в цену, каждое следующее +'+DEVICE_PRICE+' ₽';
-    document.getElementById('sum').textContent = total()+' ₽'; document.getElementById('sumh').textContent = total()+' ₽';
+    var tt=total(); rollBar.set(tt); rollHdr.set(tt);
     document.getElementById('sumName').textContent = p.name+' · '+(fixed?p.fixed:state.dev)+' устр.';
   }
   document.getElementById('minus').onclick=function(){ if(state.dev>1){state.dev--; haptic('light'); render();} };
@@ -282,10 +334,12 @@ ol{padding:0;margin:0}
   document.getElementById('pay').onclick = function(){
     haptic('medium');
     if (api.ok){ methods(); return; }
+    
     var p = cur();
     toBot('buy_'+p.key+'_'+(p.fixed||state.dev));
   };
 
+  
   document.addEventListener('pointermove', function(e){
     var g = e.target.closest && e.target.closest('.glass'); if(!g) return;
     var r = g.getBoundingClientRect();
@@ -293,19 +347,21 @@ ol{padding:0;margin:0}
   });
   document.addEventListener('pointerup', function(){ [].forEach.call(document.querySelectorAll('.glass'), function(g){ g.style.setProperty('--ho','.55'); }); });
 
+  
   var hero=document.querySelector('.hero'), hdr=document.getElementById('hdr'), ticking=false;
   function onScroll(){
     var r = hero.getBoundingClientRect(), h = r.height || 1;
-    var p = Math.min(1, Math.max(0, -r.top / (h*.7)));
+    var p = Math.min(1, Math.max(0, -r.top / (h*.7)));          
     hero.style.transform = 'translateY('+(p*14)+'px) scale('+(1-.07*p)+')';
     hero.style.opacity = String(1 - .75*p);
-    var on = r.bottom < 70;
+    var on = r.bottom < 70;                                        
     if (on !== hdr.classList.contains('on')){ hdr.classList.toggle('on', on); hdr.setAttribute('aria-hidden', String(!on)); if(on) haptic('soft'); }
     ticking=false;
   }
   window.addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(onScroll);} }, {passive:true});
   onScroll();
 
+  
   function b64d(x){
     var b = x.replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4) b+='=';
     var bin = atob(b), bytes = new Uint8Array(bin.length);
@@ -365,6 +421,7 @@ ol{padding:0;margin:0}
   var snap = readSnap();
   renderMine(snap);
 
+  
   function call(path, body){
     var ctl = new AbortController(); var to=setTimeout(function(){ctl.abort()},12000);
     body = body||{}; body.initData = tg.initData;
@@ -377,6 +434,7 @@ ol{padding:0;margin:0}
     }).catch(function(){});
   }
 
+  
   var sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim'), poll=null;
   function openSheet(html){ sheet.innerHTML=html; sheet.classList.add('on'); scrim.classList.add('on'); var x=sheet.querySelector('.x'); if(x) x.onclick=closeSheet; }
   function closeSheet(){ sheet.classList.remove('on'); scrim.classList.remove('on'); if(poll){clearInterval(poll); poll=null;} }
@@ -410,6 +468,7 @@ ol{padding:0;margin:0}
     call('/api/pay',{tariff:p.key,devices:p.fixed||state.dev,provider:m}).then(function(j){
       if(!j.ok) return fail(ERR[j.error]||'Ошибка '+(j._status||'')+', попробуйте позже.');
       if(j.paid) return success(j.link, j.synced);
+      
       try{ tg.openLink(j.url); }catch(e){ window.open(j.url,'_blank'); }
       waiting(j);
     }).catch(function(){ fail('Нет связи с сервером оплаты. Откройте приложение из бота и попробуйте снова.'); });
