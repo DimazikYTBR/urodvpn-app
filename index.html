@@ -129,6 +129,30 @@ ol{padding:0;margin:0}
 .copy:active{transform:scale(.94)}
 .mine .tiny{margin:10px 2px 0;font-size:12.5px;color:var(--mute)}
 
+.lvl{padding:20px;margin-top:14px;display:none;--ac:#b0b4c0;position:relative;overflow:hidden}
+.lvl.show{display:block}
+.lvl::before{content:"";position:absolute;inset:-40% -20% auto auto;width:260px;height:260px;border-radius:50%;background:var(--ac);opacity:.16;filter:blur(50px);pointer-events:none}
+.lvl .lrow{display:flex;gap:16px;align-items:center;position:relative}
+.lvl .badge{flex:none;width:92px;height:92px;position:relative}
+.lvl .badge svg{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 18px color-mix(in srgb,var(--ac) 55%,transparent))}
+.lvl .badge::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);transform:translateX(-120%);animation:shine 4.5s ease-in-out 1.2s infinite;mix-blend-mode:overlay;clip-path:polygon(50% 2%,93% 26%,93% 74%,50% 98%,7% 74%,7% 26%)}
+@keyframes shine{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+.lvl .tag{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--ac)}
+.lvl .nm{font-family:"Unbounded","Manrope",sans-serif;font-weight:700;font-size:27px;line-height:1.1;margin:4px 0 6px}
+.lvl .ds{font-size:15px;color:var(--mute)}
+.lvl .ds b{color:var(--text);font-family:"Unbounded",sans-serif;font-size:17px}
+.lvl .lbar{height:10px;border-radius:99px;background:rgba(255,255,255,.14);margin:18px 0 8px;overflow:hidden;position:relative}
+.lvl .lbar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 70%,#000),var(--ac));transition:width 1.2s cubic-bezier(.2,.9,.2,1)}
+.lvl .cap{font-size:13.5px;color:var(--mute)}
+.lvl .cap b{color:var(--text)}
+.lvl .steps{display:flex;align-items:center;margin-top:16px;gap:0}
+.lvl .steps i{flex:none;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);transition:background .6s,transform .6s}
+.lvl .steps i.on{background:var(--ac);border-color:transparent}
+.lvl .steps i.cur{transform:scale(1.55);box-shadow:0 0 0 4px color-mix(in srgb,var(--ac) 30%,transparent)}
+.lvl .steps u{flex:1;height:2px;background:rgba(255,255,255,.14);transition:background .6s}
+.lvl .steps u.on{background:var(--ac)}
+.lvl .tiny{margin:12px 2px 0;font-size:12.5px;color:var(--mute)}
+
 .hdr{position:fixed;left:14px;right:14px;top:calc(var(--sat) + 10px);max-width:492px;margin:0 auto;z-index:6;height:56px;padding:0 10px 0 12px;
   display:flex;align-items:center;gap:12px;border-radius:999px;
   transform:translateY(calc(-100% - 24px)) scale(.9);opacity:0;transform-origin:50% 0;pointer-events:none;
@@ -207,6 +231,8 @@ ol{padding:0;margin:0}
     <div id="mBody"></div>
   </section>
 
+  <section class="glass lvl in" id="lvl" aria-live="polite"></section>
+
   <h2>Тариф</h2>
   <div class="plans" id="plans"></div>
 
@@ -241,14 +267,13 @@ ol{padding:0;margin:0}
   var u = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
   if (u && u.first_name) document.getElementById('name').textContent = u.first_name;
 
-  
   var PLANS = [
     {key:'gb100',  name:'100 ГБ',   price:79,  desc:'100 ГБ трафика на 30 дней',                color:'#5ee6ff'},
     {key:'unlim',  name:'Безлимит', price:109, desc:'Без ограничения трафика, 30 дней',          color:'#8b6cff'},
     {key:'family', name:'Я и моя семья', price:169, desc:'Безлимит на 10 устройств, 30 дней', color:'#ff7a59', fixed:10}
   ];
   var DEVICE_PRICE = 5, MAX_DEV = 5, INCLUDED = 1;
-  var API_URL = '';   
+  var API_URL = '';
   var api = {ok:false, prices:null, snap:null};
   var state = {plan:'gb100', dev:1};
 
@@ -267,17 +292,59 @@ ol{padding:0;margin:0}
   function cur(){ return PLANS.filter(function(p){return p.key===state.plan})[0]; }
   function total(){ var p=cur(), d=p.fixed||state.dev;
     if (api.prices && api.prices[p.key] && api.prices[p.key][String(d)]!=null) return api.prices[p.key][String(d)];
-    return p.fixed ? p.price : p.price + Math.max(0,state.dev-INCLUDED)*DEVICE_PRICE; }
-  function priceOf(p){ var d=p.fixed||state.dev; if (api.prices && api.prices[p.key] && api.prices[p.key][String(d)]!=null) return api.prices[p.key][String(d)]; return p.fixed?p.price:p.price+Math.max(0,state.dev-INCLUDED)*DEVICE_PRICE; }
+    return lvDisc(p.fixed ? p.price : p.price + Math.max(0,state.dev-INCLUDED)*DEVICE_PRICE); }
+  function priceOf(p){ var d=p.fixed||state.dev; if (api.prices && api.prices[p.key] && api.prices[p.key][String(d)]!=null) return api.prices[p.key][String(d)]; return lvDisc(p.fixed?p.price:p.price+Math.max(0,state.dev-INCLUDED)*DEVICE_PRICE); }
   function haptic(t){ try{ tg.HapticFeedback.impactOccurred(t); }catch(e){} }
 
-  
-  var RH=1.3, CYC=60;                                     
+  var LVL_DEF = [
+    {n:'Новичок',   c:'#98a2b8'}, {n:'Уголь', c:'#b4b8c4'}, {n:'Бронза', c:'#e0985a'},
+    {n:'Серебро',   c:'#d3dcec'}, {n:'Золото', c:'#fbcd46'}, {n:'Алмаз',  c:'#7dd7ff'}, {n:'Бриллиант', c:'#d0d3e2'}
+  ];
+  function lvIcon(i){
+    var c = LVL_DEF[i].c, hex='<polygon points="50,4 91,27 91,73 50,96 9,73 9,27" fill="'+c+'"/><polygon points="50,10 86,30 86,70 50,90 14,70 14,30" fill="#0b0f1d" fill-opacity=".78"/>', ic='';
+    if(i===0) ic='<circle cx="50" cy="50" r="17" fill="none" stroke="'+c+'" stroke-width="5"/>';
+    else if(i===1) ic='<defs><mask id="bite"><rect width="100" height="100" fill="#fff"/><circle cx="68" cy="32" r="12" fill="#000"/></mask></defs><g mask="url(#bite)"><circle cx="50" cy="50" r="23" fill="'+c+'"/><circle cx="50" cy="50" r="16" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="3"/><circle cx="50" cy="50" r="5" fill="#000" fill-opacity=".35"/></g>';
+    else if(i===5) ic='<polygon points="30,43 40,28 60,28 70,43 50,74" fill="'+c+'"/><polygon points="30,43 40,28 50,43" fill="#fff" fill-opacity=".55"/><polygon points="70,43 60,28 50,43" fill="#fff" fill-opacity=".55"/><polygon points="30,43 70,43 50,74" fill="#000" fill-opacity=".18"/>';
+    else if(i===6){ var o='',n='',k; for(k=0;k<8;k++){ var a=(22.5+45*k)*Math.PI/180; o+=(50+25*Math.cos(a)).toFixed(1)+','+(50+25*Math.sin(a)).toFixed(1)+' '; n+=(50+13*Math.cos(a)).toFixed(1)+','+(50+13*Math.sin(a)).toFixed(1)+' '; }
+      ic='<polygon points="'+o+'" fill="'+c+'"/><polygon points="'+n+'" fill="#0b0b10" stroke="#fff" stroke-opacity=".5" stroke-width="1.2"/><line x1="44" y1="46" x2="52" y2="46" stroke="#fff" stroke-opacity=".7" stroke-width="2" stroke-linecap="round"/>'; }
+    else ic='<polygon points="50,26 56,43 74,43 60,54 65,72 50,61 35,72 40,54 26,43 44,43" fill="'+c+'"/>';
+    return '<svg viewBox="0 0 100 100" aria-hidden="true">'+hex+ic+'</svg>';
+  }
+  function fmtPct(x){ return String(x).replace('.',','); }
+  function fmtNum(x){ return String(x).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0'); }
+  function renderLevel(s){
+    var box=document.getElementById('lvl'); if(!box||!s||!s.lv) return;
+    var lv=s.lv, i=Math.max(0,Math.min(LVL_DEF.length-1,lv.i|0)), def=LVL_DEF[i], prev=box.dataset.i;
+    box.style.setProperty('--ac',def.c); box.classList.add('show');
+    var k;
+    var frac=1, cap;
+    if(lv.nt!=null){
+      var left=Math.max(0,lv.nt-lv.s);
+      var lo=lv.lo!=null?lv.lo:(LVL_THR[i]||0);
+      frac=Math.max(0,Math.min(1,(lv.s-lo)/Math.max(1,lv.nt-lo)));
+      cap='До «<b>'+esc(lv.nn)+'</b>»: ещё <b>'+fmtNum(left)+' ₽</b> (−'+fmtPct(lv.np)+'%)';
+    } else cap='<b>Максимальный уровень</b>';
+    var st=''; for(k=0;k<LVL_DEF.length;k++){ st+=(k?'<u class="'+(k<=i?'on':'')+'"></u>':'')+'<i class="'+(k<=i?'on':'')+(k===i?' cur':'')+'"></i>'; }
+    box.innerHTML=
+      '<div class="lrow"><div class="badge">'+lvIcon(i)+'</div><div>'+
+      '<div class="tag">ВАШ УРОВЕНЬ</div><div class="nm" style="color:'+def.c+'">'+esc(lv.n||def.n)+'</div>'+
+      '<div class="ds">'+(lv.p? 'Скидка <b>−'+fmtPct(lv.p)+'%</b> на подписки':'Скидка появится с первого уровня')+'</div></div></div>'+
+      '<div class="lbar"><i id="lBar"></i></div><div class="cap">'+cap+'</div>'+
+      '<div class="steps">'+st+'</div>'+
+      '<p class="tiny">Уровень растёт от суммы покупок подписок и подарков. Скидка '+(lv.p?'уже учтена в ценах ниже и':'')+' действует и на автопродление.</p>';
+    box.dataset.i=i;
+    requestAnimationFrame(function(){ setTimeout(function(){ var b=document.getElementById('lBar'); if(b) b.style.width=Math.round(frac*100)+'%'; },300); });
+    if(prev!==undefined && prev!==String(i)) haptic('medium');
+  }
+  var LVL_THR=[0,150,500,1000,2000,4000,10000];
+  function lvPct(){ var s=(api.snap&&api.snap.lv)?api.snap:(typeof snap!=='undefined'?snap:null); return (s&&s.lv&&s.lv.p)||0; }
+  function lvDisc(v){ var p=lvPct(); return p? Math.max(Math.floor(v*(100-p)/100+0.5),10) : v; }
+
+  var RH=1.3, CYC=60;
   function Roller(el){ this.el=el; this.cols=[]; this.value=null; this.t=null; }
   Roller.prototype.set=function(n){
     var el=this.el, str=String(n), old=this.value; this.value=n;
     var instant = old===null, dir = instant?0:(n>old?1:-1);
-    
     while(this.cols.length>str.length){ var rm=this.cols.shift(); rm.node.remove(); }
     var added=false;
     while(this.cols.length<str.length){
@@ -294,8 +361,8 @@ ol{padding:0;margin:0}
       if(instant){ col.idx=20+d; }
       else {
         if(col.idx<10||col.idx>39){ col.idx = 20 + (col.idx%10); col.strip.style.transition='none'; col.strip.style.transform='translate3d(0,-'+(col.idx*RH)+'em,0)'; void col.strip.offsetHeight; }
-        if(delta===0) delta = dir>=0 ? 10 : -10;                 
-        col.idx += delta + ((i===str.length-1) ? (dir>=0 ? 10 : -10) : 0);   
+        if(delta===0) delta = dir>=0 ? 10 : -10;
+        col.idx += delta + ((i===str.length-1) ? (dir>=0 ? 10 : -10) : 0);
       }
       col.d=d;
       col.strip.style.transition = instant ? 'none' : 'transform '+(0.55+(str.length-1-i)*0.08)+'s cubic-bezier(.2,1.08,.3,1) '+((str.length-1-i)*0.04)+'s';
@@ -311,7 +378,6 @@ ol{padding:0;margin:0}
   function mkRoller(id){ var el=document.getElementById(id); el.innerHTML='<span class="cur"> ₽</span>'; return new Roller(el); }
   var rollBar = mkRoller('sum'), rollHdr = mkRoller('sumh'), hdrEl = document.getElementById('hdr');
 
-  
   function measureDigits(){
     [].forEach.call(document.querySelectorAll('.roll'), function(el){
       var t=document.createElement('span'), cs=getComputedStyle(el);
@@ -345,12 +411,10 @@ ol{padding:0;margin:0}
   document.getElementById('pay').onclick = function(){
     haptic('medium');
     if (api.ok){ methods(); return; }
-    
     var p = cur();
     toBot('buy_'+p.key+'_'+(p.fixed||state.dev));
   };
 
-  
   document.addEventListener('pointermove', function(e){
     var g = e.target.closest && e.target.closest('.glass'); if(!g) return;
     var r = g.getBoundingClientRect();
@@ -358,21 +422,19 @@ ol{padding:0;margin:0}
   });
   document.addEventListener('pointerup', function(){ [].forEach.call(document.querySelectorAll('.glass'), function(g){ g.style.setProperty('--ho','.55'); }); });
 
-  
   var hero=document.querySelector('.hero'), hdr=document.getElementById('hdr'), ticking=false;
   function onScroll(){
     var r = hero.getBoundingClientRect(), h = r.height || 1;
-    var p = Math.min(1, Math.max(0, -r.top / (h*.7)));          
+    var p = Math.min(1, Math.max(0, -r.top / (h*.7)));
     hero.style.transform = 'translateY('+(p*14)+'px) scale('+(1-.07*p)+')';
     hero.style.opacity = String(1 - .75*p);
-    var on = r.bottom < 70;                                        
+    var on = r.bottom < 70;
     if (on !== hdr.classList.contains('on')){ hdr.classList.toggle('on', on); hdr.setAttribute('aria-hidden', String(!on)); if(on) haptic('soft'); }
     ticking=false;
   }
   window.addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(onScroll);} }, {passive:true});
   onScroll();
 
-  
   function b64d(x){
     var b = x.replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4) b+='=';
     var bin = atob(b), bytes = new Uint8Array(bin.length);
@@ -395,6 +457,7 @@ ol{padding:0;margin:0}
   function renderMine(snap){
     var box=document.getElementById('mine'), st=document.getElementById('mSt'), body=document.getElementById('mBody');
     if(!snap) return;
+    renderLevel(snap);
     box.classList.add('show');
     if (snap.active){
       st.className='st ok'; st.textContent='Активна';
@@ -432,7 +495,6 @@ ol{padding:0;margin:0}
   var snap = readSnap();
   renderMine(snap);
 
-  
   function call(path, body){
     var ctl = new AbortController(); var to=setTimeout(function(){ctl.abort()},12000);
     body = body||{}; body.initData = tg.initData;
@@ -445,7 +507,6 @@ ol{padding:0;margin:0}
     }).catch(function(){});
   }
 
-  
   var sheet=document.getElementById('sheet'), scrim=document.getElementById('scrim'), poll=null;
   function openSheet(html){ sheet.innerHTML=html; sheet.classList.add('on'); scrim.classList.add('on'); var x=sheet.querySelector('.x'); if(x) x.onclick=closeSheet; }
   function closeSheet(){ sheet.classList.remove('on'); scrim.classList.remove('on'); if(poll){clearInterval(poll); poll=null;} }
@@ -479,7 +540,6 @@ ol{padding:0;margin:0}
     call('/api/pay',{tariff:p.key,devices:p.fixed||state.dev,provider:m}).then(function(j){
       if(!j.ok) return fail(ERR[j.error]||'Ошибка '+(j._status||'')+', попробуйте позже.');
       if(j.paid) return success(j.link, j.synced);
-      
       try{ tg.openLink(j.url); }catch(e){ window.open(j.url,'_blank'); }
       waiting(j);
     }).catch(function(){ fail('Нет связи с сервером оплаты. Откройте приложение из бота и попробуйте снова.'); });
