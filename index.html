@@ -310,6 +310,7 @@ ol{padding:0;margin:0}
     else ic='<polygon points="50,26 56,43 74,43 60,54 65,72 50,61 35,72 40,54 26,43 44,43" fill="'+c+'"/>';
     return '<svg viewBox="0 0 100 100" aria-hidden="true">'+hex+ic+'</svg>';
   }
+  function tokWord(n){ n=Math.abs(n|0); var a=n%10,b=n%100; return (a===1&&b!==11)?'токен':((a>=2&&a<=4&&!(b>=12&&b<=14))?'токена':'токенов'); }
   function fmtPct(x){ return String(x).replace('.',','); }
   function fmtNum(x){ return String(x).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0'); }
   function renderLevel(s){
@@ -319,19 +320,19 @@ ol{padding:0;margin:0}
     var k;
     var frac=1, cap;
     if(lv.nt!=null){
-      var left=Math.max(0,lv.nt-lv.s);
+      var left=Math.max(0,lv.nt-lv.s), K=lv.k||2;
       var lo=lv.lo!=null?lv.lo:(LVL_THR[i]||0);
       frac=Math.max(0,Math.min(1,(lv.s-lo)/Math.max(1,lv.nt-lo)));
-      cap='До «<b>'+esc(lv.nn)+'</b>»: ещё <b>'+fmtNum(left)+' ₽</b> (−'+fmtPct(lv.np)+'%)';
+      cap='До «<b>'+esc(lv.nn)+'</b>»: ещё <b>'+fmtNum(left)+' '+tokWord(left)+'</b> (−'+fmtPct(lv.np)+'%)';
     } else cap='<b>Максимальный уровень</b>';
     var st=''; for(k=0;k<LVL_DEF.length;k++){ st+=(k?'<u class="'+(k<=i?'on':'')+'"></u>':'')+'<i class="'+(k<=i?'on':'')+(k===i?' cur':'')+'"></i>'; }
     box.innerHTML=
       '<div class="lrow"><div class="badge">'+lvIcon(i)+'</div><div>'+
       '<div class="tag">ВАШ УРОВЕНЬ</div><div class="nm" style="color:'+def.c+'">'+esc(lv.n||def.n)+'</div>'+
-      '<div class="ds">'+(lv.p? 'Скидка <b>−'+fmtPct(lv.p)+'%</b> на подписки':'Скидка появится с первого уровня')+'</div></div></div>'+
+      '<div class="ds">'+(lv.p? 'Скидка <b>−'+fmtPct(lv.p)+'%</b> на подписки':'Скидка появится с первого уровня')+'</div><div class="ds" style="margin-top:4px"><b>'+fmtNum(lv.s)+'</b> '+tokWord(lv.s)+'</div></div></div>'+
       '<div class="lbar"><i id="lBar"></i></div><div class="cap">'+cap+'</div>'+
       '<div class="steps">'+st+'</div>'+
-      '<p class="tiny">Уровень растёт от суммы покупок подписок и подарков. Скидка '+(lv.p?'уже учтена в ценах ниже и':'')+' действует и на автопродление.</p>';
+      '<p class="tiny">Токены копятся за покупки подписок и подарков: 1 ₽ = '+(lv.k||2)+' '+tokWord(lv.k||2)+'. Скидка '+(lv.p?'уже учтена в ценах ниже и':'')+' действует и на автопродление.</p>';
     box.dataset.i=i;
     requestAnimationFrame(function(){ setTimeout(function(){ var b=document.getElementById('lBar'); if(b) b.style.width=Math.round(frac*100)+'%'; },300); });
     if(prev!==undefined && prev!==String(i)) haptic('medium');
