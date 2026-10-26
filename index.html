@@ -185,6 +185,15 @@ ol{padding:0;margin:0}
 .big-ok{width:64px;height:64px;border-radius:50%;margin:4px auto 12px;display:grid;place-items:center;background:var(--mint);box-shadow:0 0 40px rgba(75,227,168,.6);animation:pop .6s cubic-bezier(.2,1.6,.4,1)}
 @keyframes pop{from{transform:scale(.2)}}
 .btn2{display:block;width:100%;margin-top:12px;border:0;cursor:pointer;font:800 16px "Manrope",sans-serif;color:#06101c;padding:16px;border-radius:999px;background:linear-gradient(135deg,#fff,var(--cyan))}
+.orders{margin:4px 0 6px;padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16)}
+.orow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;font-size:15px;border-bottom:1px solid rgba(255,255,255,.1)}
+.orow:last-child{border-bottom:0}.orow span{color:var(--mute)}.orow b{text-align:right}
+.orow.tot{font-size:18px}.orow.tot b{font-family:"Unbounded",sans-serif}
+.mlabel{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--mute);margin:16px 2px 0}
+.opt.sel{border-color:var(--cyan);background:rgba(94,230,255,.14)}
+.opt .dot{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.55);display:grid;place-items:center}
+.opt.sel .dot{border-color:var(--cyan);background:var(--cyan)}
+.opt.sel .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:#06101c}
 .btn2.ghost{background:rgba(255,255,255,.12);color:var(--text);border:1px solid rgba(255,255,255,.25)}
 
 .roll{display:inline-flex;align-items:center;line-height:1.3;transition:transform .45s cubic-bezier(.2,1.4,.3,1),color .5s;transform-origin:0 60%}
@@ -273,7 +282,7 @@ ol{padding:0;margin:0}
     {key:'family', name:'Я и моя семья', price:169, desc:'Безлимит на 10 устройств, 30 дней', color:'#ff7a59', fixed:10}
   ];
   var DEVICE_PRICE = 5, MAX_DEV = 5, INCLUDED = 1;
-  var API_URL = '';
+  var API_URL = 'https://pay.dublikata.space';
   var api = {ok:false, prices:null, snap:null};
   var state = {plan:'gb100', dev:1};
 
@@ -485,7 +494,8 @@ ol{padding:0;margin:0}
   var BOT='MyUrodVPNBot';
   function toBot(payload){
     var u='https://t.me/'+BOT+'?start='+payload;
-    try{ if(tg && tg.openTelegramLink){ tg.openTelegramLink(u); setTimeout(function(){ try{tg.close();}catch(e){} },300); return; } }catch(e){}
+    try{ if(tg && tg.openTelegramLink){ tg.openTelegramLink(u); setTimeout(function(){ try{tg.close();}catch(e){} },900); return; } }catch(e){}
+    try{ if(tg && tg.openLink){ tg.openLink(u); return; } }catch(e){}
     location.href=u;
   }
   function copyText(text, btn){
@@ -512,17 +522,37 @@ ol{padding:0;margin:0}
   function openSheet(html){ sheet.innerHTML=html; sheet.classList.add('on'); scrim.classList.add('on'); var x=sheet.querySelector('.x'); if(x) x.onclick=closeSheet; }
   function closeSheet(){ sheet.classList.remove('on'); scrim.classList.remove('on'); if(poll){clearInterval(poll); poll=null;} }
   scrim.onclick=function(){ if(!poll) closeSheet(); };
+  var chosen=null;
+  function orderRows(p,d,price){
+    var base=p.fixed?p.price:p.price+Math.max(0,d-INCLUDED)*DEVICE_PRICE, lvp=lvPct(), rows=[];
+    rows.push('<div class="orow"><span>Тариф</span><b>'+esc(p.name)+'</b></div>');
+    rows.push('<div class="orow"><span>Устройства</span><b>'+d+'</b></div>');
+    rows.push('<div class="orow"><span>Срок</span><b>30 дней</b></div>');
+    if(!p.fixed && d>INCLUDED) rows.push('<div class="orow"><span>Доплата за устройства</span><b>+'+((d-INCLUDED)*DEVICE_PRICE)+' ₽</b></div>');
+    if(lvp && base>price) rows.push('<div class="orow"><span>Скидка уровня −'+fmtPct(lvp)+'%</span><b>−'+(base-price)+' ₽</b></div>');
+    rows.push('<div class="orow tot"><span>Итого</span><b>'+price+' ₽</b></div>');
+    return '<div class="orders">'+rows.join('')+'</div>';
+  }
+  function feeOf(m){ var f=(api.snap&&api.snap.fees)||{rollypay:3.09,xrocket:1.5}; return f[m]||0; }
+  function withFee(price,m){ return Math.ceil(price*(1+feeOf(m)/100)-1e-9); }
+  function fpct(m){ return String(feeOf(m)).replace('.',','); }
   function methods(){
-    var p=cur(), price=total(), bal=(api.snap&&api.snap.bal)||0, d=p.fixed||state.dev;
-    var can = bal>=price;
+    var p=cur(), price=total(), bal=(api.snap&&api.snap.bal)||0, d=p.fixed||state.dev, can=bal>=price;
+    if(!chosen || (chosen==='balance' && !can)) chosen = can ? 'balance' : 'rollypay';
     openSheet(
       '<button class="x" type="button" aria-label="Закрыть">✕</button>'+
-      '<h3>Оплата</h3><p class="sub">'+esc(p.name)+' · '+d+' устр. · 30 дней — <b style="color:var(--text)">'+price+' ₽</b></p>'+
-      '<button class="opt" data-m="balance" '+(can?'':'disabled')+'><div><b>С баланса</b><span>'+(can?'Баланс '+bal+' ₽, спишем сразу':'Не хватает, баланс '+bal+' ₽')+'</span></div><span class="go">'+(can?'Оплатить':'—')+'</span></button>'+
-      '<button class="opt" data-m="rollypay"><div><b>Рублями (СБП)</b><span>Откроется страница оплаты</span></div><span class="go">'+price+' ₽</span></button>'+
-      '<button class="opt" data-m="xrocket"><div><b>USDT через xRocket</b><span>Оплата криптовалютой</span></div><span class="go">USDT</span></button>'+
-      '<p class="tiny" style="margin-top:14px">Промокод и скидка уровня уже учтены в цене. Промокод вводится в боте.</p>');
-    [].forEach.call(sheet.querySelectorAll('.opt'), function(b){ b.onclick=function(){ if(!b.disabled) startPay(b.dataset.m); }; });
+      '<h3>Ваш заказ</h3><p class="sub">Проверьте и подтвердите</p>'+orderRows(p,d,price)+
+      '<div class="mlabel">СПОСОБ ОПЛАТЫ</div>'+
+      '<button class="opt" data-m="balance" '+(can?'':'disabled')+'><div><b>С баланса</b><span>'+(can?'Баланс '+bal+' ₽, спишем сразу':'Не хватает, баланс '+bal+' ₽')+'</span></div><i class="dot"></i></button>'+
+      '<button class="opt" data-m="rollypay"><div><b>Рублями (СБП)</b><span>Комиссия '+fpct('rollypay')+'%, итого '+withFee(price,'rollypay')+' ₽</span></div><i class="dot"></i></button>'+
+      '<button class="opt" data-m="xrocket"><div><b>USDT через xRocket</b><span>Комиссия '+fpct('xrocket')+'%, итого '+withFee(price,'xrocket')+' ₽</span></div><i class="dot"></i></button>'+
+      '<button class="btn2" id="confirm" type="button">Подтвердить заказ</button>'+
+      '<p class="tiny" style="margin-top:14px">Цена с учётом скидки уровня и промокода. С баланса комиссии нет, платёжные системы берут свою комиссию сверху.</p>');
+    var opts=[].slice.call(sheet.querySelectorAll('.opt'));
+    function mark(){ opts.forEach(function(b){ b.classList.toggle('sel', b.dataset.m===chosen); }); }
+    mark();
+    opts.forEach(function(b){ b.onclick=function(){ if(!b.disabled){ chosen=b.dataset.m; haptic('light'); mark(); } }; });
+    document.getElementById('confirm').onclick=function(){ haptic('medium'); startPay(chosen); };
   }
   function loading(t){ openSheet('<div class="center"><div class="spin"></div><h3>'+t+'</h3></div>'); }
   function fail(msg){ openSheet('<button class="x" type="button" aria-label="Закрыть">✕</button><div class="center"><h3>Не получилось</h3><p class="sub">'+esc(msg)+'</p></div><button class="btn2" id="again">Назад</button>'); document.getElementById('again').onclick=methods; }
@@ -541,16 +571,23 @@ ol{padding:0;margin:0}
     call('/api/pay',{tariff:p.key,devices:p.fixed||state.dev,provider:m}).then(function(j){
       if(!j.ok) return fail(ERR[j.error]||'Ошибка '+(j._status||'')+', попробуйте позже.');
       if(j.paid) return success(j.link, j.synced);
-      try{ tg.openLink(j.url); }catch(e){ window.open(j.url,'_blank'); }
       waiting(j);
     }).catch(function(){ fail('Нет связи с сервером оплаты. Откройте приложение из бота и попробуйте снова.'); });
   }
+  function openPay(url){ try{ tg.openLink(url); }catch(e){ window.open(url,'_blank'); } }
   function waiting(j){
     var t0=Date.now(), ttl=(j.ttl||3600)*1000;
-    openSheet('<div class="center"><div class="spin"></div><h3>Ждём оплату</h3><p class="sub">Оплатите счёт '+j.price+' ₽ на открывшейся странице. Здесь всё обновится само.</p></div>'+
-      '<button class="btn2 ghost" id="reopen">Открыть оплату снова</button><button class="btn2 ghost" id="cancel">Отмена</button>');
-    document.getElementById('reopen').onclick=function(){ try{tg.openLink(j.url);}catch(e){window.open(j.url,'_blank');} };
+    haptic('medium');
+    openSheet('<button class="x" type="button" aria-label="Закрыть">✕</button><div class="center"><h3>Ссылка на оплату готова</h3>'+
+      '<p class="sub">К оплате <b style="color:var(--text)">'+j.price+' ₽</b>'+(j.fee?' (с комиссией '+j.fee+' ₽)':'')+'. Нажмите «Оплатить», откроется страница оплаты. После оплаты здесь всё обновится само.</p></div>'+
+      '<button class="btn2" id="payNow" type="button">Оплатить '+j.price+' ₽</button>'+
+      '<button class="btn2 ghost" id="cpLink" type="button">Скопировать ссылку</button>'+
+      '<p class="tiny center" style="margin-top:14px"><span class="spin" style="width:16px;height:16px;border-width:3px;display:inline-block;margin:0 8px -3px 0"></span>Ждём подтверждение оплаты</p>'+
+      '<button class="btn2 ghost" id="cancel" type="button">Отмена</button>');
+    document.getElementById('payNow').onclick=function(){ haptic('heavy'); openPay(j.url); };
+    document.getElementById('cpLink').onclick=function(){ copyText(j.url, this); };
     document.getElementById('cancel').onclick=function(){ clearInterval(poll); poll=null; closeSheet(); };
+    var xb=sheet.querySelector('.x'); if(xb) xb.onclick=function(){ clearInterval(poll); poll=null; closeSheet(); };
     if(poll) clearInterval(poll);
     poll=setInterval(function(){
       if(Date.now()-t0>ttl){ clearInterval(poll); poll=null; return fail('Счёт истёк. Создайте новый.'); }
