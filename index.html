@@ -455,7 +455,7 @@ html.hw .hwtag{display:block}
   document.getElementById('pay').onclick = function(){
     haptic('medium');
     if (api.ok){ methods(); return; }
-    var p = cur(), d = p.fixed||state.dev, payload = 'buy_'+p.key+'_'+d, url = 'https://t.me/'+BOT+'?start='+payload;
+    var p = cur(), d = p.fixed||state.dev, payload = 'buy_'+p.key+'_'+d, url = 'https://t.me/MyUrodVPNBot?start='+payload;
     openSheet('<button class="x" type="button" aria-label="Закрыть">✕</button><h3>Ваш заказ</h3><p class="sub">Оплата проходит в чате с ботом: там выберете способ и получите ссылку на оплату.</p>'+
       '<div class="orders"><div class="orow"><span>Тариф</span><b>'+esc(p.name)+'</b></div><div class="orow"><span>Устройства</span><b>'+d+'</b></div><div class="orow tot"><span>Итого</span><b>'+total()+' ₽</b></div></div>'+
       '<a class="btn2" id="toBotA" href="'+url+'" style="display:block;text-align:center;text-decoration:none">Продолжить в боте</a>'+
