@@ -465,7 +465,7 @@ html.hw .hwtag{display:block}
     var url = 'https://t.me/MyUrodVPNBot?start=' +
         encodeURIComponent(payload);
     try {
-        tg.openTelegramLink(url);
+        tg.openLink(url);
     } catch (err) {
         alert('Ошибка: ' + err.message);
     }
