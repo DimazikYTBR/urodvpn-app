@@ -234,6 +234,7 @@ html.hw .hwtag{display:block}
   document.documentElement.classList.add('hw');
   var m=document.querySelector('meta[name=theme-color]'); if(m) m.content='#0b0612';
   document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('img[src="logo.jpg"]').forEach(function(im){ im.src='logo-hw.jpg'; });
     var f=document.getElementById('hwf'), e=['🎃','🦇','👻','🕸️','🎃','🦇'];
     for(var i=0;i<14;i++){ var x=document.createElement('i'); x.textContent=e[i%e.length]; x.style.left=(Math.random()*94)+'%'; x.style.fontSize=(18+Math.random()*20)+'px'; x.style.animationDuration=(14+Math.random()*16)+'s'; x.style.animationDelay=(-Math.random()*24)+'s'; f.appendChild(x); }
     var t=window.Telegram&&Telegram.WebApp; if(t){ try{ t.setHeaderColor('#0b0612'); t.setBackgroundColor('#0b0612'); }catch(_){} }
