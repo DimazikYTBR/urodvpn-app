@@ -215,9 +215,34 @@ ol{padding:0;margin:0}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass{background:rgba(30,38,70,.85)}}
 .salebn{margin:10px 0 0;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(255,138,0,.22),rgba(139,108,255,.22));border:1px solid rgba(255,160,60,.45);font-weight:700;font-size:14px;color:#ffd9a8}
 .salebn[hidden]{display:none}
+
+html.hw{--ink:#0b0612;--ink2:#160a1f;--cyan:#ff9a2e;--violet:#a24dff;--coral:#ff5a1f;--mint:#9be34b;--glass-b:rgba(255,160,70,.32)}
+html.hw .bg{background:radial-gradient(120% 80% at 50% 0%,#2a0f3d 0%,var(--ink) 62%)}
+html.hw .b1{background:#7a2cff}html.hw .b2{background:#ff7a1a;opacity:.55}html.hw .b3{background:#ff3d00;opacity:.45}
+html.hw .glass{box-shadow:inset 0 1px 0 rgba(255,190,110,.5),inset 0 -1px 0 rgba(255,255,255,.06),0 18px 40px -12px rgba(0,0,0,.65),0 0 28px -10px rgba(255,120,30,.35)}
+.hwf{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;display:none}
+html.hw .hwf{display:block}
+.hwf i{position:absolute;top:-60px;font-style:normal;opacity:.55;animation:hwfall linear infinite;will-change:transform}
+@keyframes hwfall{to{transform:translateY(112vh) rotate(40deg)}}
+.hwtag{display:none;margin:0 0 14px;padding:10px 14px;border-radius:18px;font-size:13px;font-weight:800;text-align:center;color:#ffd9a8;background:linear-gradient(135deg,rgba(255,110,20,.28),rgba(140,50,255,.28));border:1px solid rgba(255,160,70,.4)}
+html.hw .hwtag{display:block}
 </style>
+<script>
+(function(){
+  var n=Date.now(), a=Date.UTC(2026,9,30,21,0,0), b=Date.UTC(2026,10,6,21,0,0);
+  if(!(n>=a&&n<b)) return;
+  document.documentElement.classList.add('hw');
+  var m=document.querySelector('meta[name=theme-color]'); if(m) m.content='#0b0612';
+  document.addEventListener('DOMContentLoaded',function(){
+    var f=document.getElementById('hwf'), e=['🎃','🦇','👻','🕸️','🎃','🦇'];
+    for(var i=0;i<14;i++){ var x=document.createElement('i'); x.textContent=e[i%e.length]; x.style.left=(Math.random()*94)+'%'; x.style.fontSize=(18+Math.random()*20)+'px'; x.style.animationDuration=(14+Math.random()*16)+'s'; x.style.animationDelay=(-Math.random()*24)+'s'; f.appendChild(x); }
+    var t=window.Telegram&&Telegram.WebApp; if(t){ try{ t.setHeaderColor('#0b0612'); t.setBackgroundColor('#0b0612'); }catch(_){} }
+  });
+})();
+</script>
 </head>
 <body>
+<div class="hwf" id="hwf" aria-hidden="true"></div>
 <div class="bg" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
 
 <header class="glass hdr" id="hdr" aria-hidden="true">
@@ -225,6 +250,7 @@ ol{padding:0;margin:0}
 </header>
 
 <main class="wrap">
+  <div class="hwtag">🎃 Хэллоуин в УродVPN · скидка −15% до 6 ноября 🦇</div>
   <div class="top in">
     <div class="hello">Привет,<b id="name">друг</b></div>
     <div id="sale" class="salebn" hidden></div>
@@ -305,7 +331,7 @@ ol{padding:0;margin:0}
   function saleOn(){ var s=(api.snap&&api.snap.sale!==undefined)?api.snap:(typeof snap!=='undefined'?snap:null); var x=s&&s.sale; return (x&&x.p&&Date.now()/1000<x.e)?x:null; }
   function saleCalc(p,d){ var x=saleOn(); if(!x) return null; return Math.max(Math.floor(p.price*(100-x.p)/100+0.5),10)+(p.fixed?0:Math.max(0,d-INCLUDED)*DEVICE_PRICE); }
   function offline(p,d){ var v=lvDisc(p.fixed?p.price:p.price+Math.max(0,d-INCLUDED)*DEVICE_PRICE), sp=saleCalc(p,d); return sp!==null&&sp<v?sp:v; }
-  function saleBanner(){ var el=document.getElementById('sale'), x=saleOn(); if(!el) return; if(x){ el.hidden=false; el.textContent='🎃 '+x.n+': −'+x.p+'% на все тарифы до 6 ноября'; } else el.hidden=true; }
+  function saleBanner(){ var el=document.getElementById('sale'), x=saleOn(); if(!el) return; if(x){ el.hidden=false; el.textContent=(x.em||'🎃')+' '+x.n+': −'+x.p+'% на все тарифы'+(x.u?' до '+x.u:''); } else el.hidden=true; }
   function total(){ var p=cur(), d=p.fixed||state.dev;
     if (api.prices && api.prices[p.key] && api.prices[p.key][String(d)]!=null) return api.prices[p.key][String(d)];
     return offline(p,d); }
