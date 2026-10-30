@@ -529,12 +529,18 @@ html.hw .hwtag{display:block}
         '<div class="facts" style="grid-template-columns:1fr"><div><b>'+snap.bal+' ₽</b><span>баланс</span></div></div>';
     }
   }
-  var BOT='MyUrodVPNBot';
-  function toBot(payload){
-    var u = 'https://t.me/MyUrodVPNBot?start=' + payload;
-    try{ if(tg && tg.openTelegramLink){ tg.openTelegramLink(u); setTimeout(function(){ try{tg.close();}catch(e){} },900); return; } }catch(e){}
-    try{ if(tg && tg.openLink){ tg.openLink(u); return; } }catch(e){}
-    location.href=u;
+  function toBot(payload) {
+    var url = 'https://t.me/MyUrodVPNBot?start=' + encodeURIComponent(payload);
+    var tg = window.Telegram && window.Telegram.WebApp;
+    if (tg && typeof tg.openTelegramLink === 'function') {
+        try {
+            tg.openTelegramLink(url);
+            return;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    window.open(url, '_blank');
   }
   function copyText(text, btn){
     var done=function(){ if(btn){ var o=btn.textContent; btn.textContent='Скопировано'; haptic('light'); setTimeout(function(){btn.textContent=o},1800);} };
