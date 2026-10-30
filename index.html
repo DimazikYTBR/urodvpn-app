@@ -460,7 +460,21 @@ html.hw .hwtag{display:block}
       '<div class="orders"><div class="orow"><span>Тариф</span><b>'+esc(p.name)+'</b></div><div class="orow"><span>Устройства</span><b>'+d+'</b></div><div class="orow tot"><span>Итого</span><b>'+total()+' ₽</b></div></div>'+
       '<a class="btn2" id="toBotA" href="'+url+'" style="display:block;text-align:center;text-decoration:none">Продолжить в боте</a>'+
       '<p class="tiny" style="margin-top:12px">Если бот не открылся, отправьте ему сообщение: <b>/start '+payload+'</b></p>');
-    document.getElementById('toBotA').onclick=function(e){ e.preventDefault(); haptic('heavy'); toBot(payload); };
+    document.getElementById('toBotA').onclick = function(e) {
+    e.preventDefault();
+    alert('Кнопка нажата!');
+    var tg = window.Telegram && window.Telegram.WebApp;
+    alert('Telegram WebApp: ' + !!tg);
+    alert('openTelegramLink: ' +
+        (tg && typeof tg.openTelegramLink));
+    var url = 'https://t.me/MyUrodVPNBot?start=' +
+        encodeURIComponent(payload);
+        if (tg && typeof tg.openTelegramLink === 'function') {
+            tg.openTelegramLink(url);
+        } else {
+             window.location.href = url;
+        }
+    };
   };
 
   document.addEventListener('pointermove', function(e){
