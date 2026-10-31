@@ -245,9 +245,9 @@ body.ing #v-menu{display:none}
 .gfly{position:absolute;left:50%;top:90%;width:0;height:0;z-index:2}
 .gfly i{position:absolute;left:0;top:0;width:46px;height:46px;opacity:0;animation:gfl 4.8s ease-in-out infinite}
 .gfly i svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
-.gfly i:nth-child(1){--dx:-92px;--dy:-120px;--r:-18deg;animation-delay:0s}
-.gfly i:nth-child(2){--dx:0px;--dy:-168px;--r:10deg;animation-delay:.45s}
-.gfly i:nth-child(3){--dx:92px;--dy:-120px;--r:22deg;animation-delay:.9s}
+.gfly i:nth-child(1){--dx:-84px;--dy:-96px;--r:-18deg;animation-delay:0s}
+.gfly i:nth-child(2){--dx:0px;--dy:-132px;--r:10deg;animation-delay:.45s}
+.gfly i:nth-child(3){--dx:84px;--dy:-96px;--r:22deg;animation-delay:.9s}
 @keyframes gfl{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}
 10%{opacity:1}
 34%{opacity:1;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.05) rotate(var(--r))}
@@ -317,6 +317,27 @@ body.ing #v-menu{display:none}
 .gload .bar2{width:180px;height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
 .gload .bar2 i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffa928,#ffe27a);animation:ld .9s ease-out forwards}
 @keyframes ld{to{width:100%}}
+
+.gban.cb{margin-top:16px;aspect-ratio:16/9;background:radial-gradient(90% 120% at 20% 0%,#3b2a8f,#120a2e 70%);box-shadow:0 18px 44px -14px rgba(0,0,0,.7),0 0 36px -10px rgba(110,90,255,.5)}
+.gban.cb::after{background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(8,4,24,.85) 100%)}
+.cfall{position:absolute;inset:0;overflow:hidden}
+.cfall i{position:absolute;top:8%;width:34px;height:34px;opacity:0;animation:cdrop linear infinite}
+.cfall i svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+@keyframes cdrop{0%{top:6%;opacity:0;transform:rotate(0)}12%{opacity:1}78%{opacity:1}100%{top:58%;opacity:0;transform:rotate(180deg)}}
+.cgame{background:radial-gradient(100% 70% at 50% 0%,#2e2380,#0b0720 70%)}
+.cgame canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;z-index:1}
+.chud{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--sat) + 14px) 16px 0;pointer-events:none}
+.chud .gx{pointer-events:auto}
+.chud b{font-family:"Unbounded",sans-serif;font-size:22px;color:#ffe27a;text-shadow:0 0 14px rgba(255,200,80,.6)}
+.cbar{position:relative;z-index:3;margin:12px 16px 0;height:8px;border-radius:8px;background:rgba(255,255,255,.14);overflow:hidden}
+.cbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#5ee6ff,#8b6cff);transform-origin:left}
+.cstart{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px;text-align:center;background:rgba(8,4,24,.82)}
+.cstart[hidden]{display:none}
+.cstart h2{margin:0;font-family:"Unbounded",sans-serif;font-size:30px;color:#fff}
+.cstart p{margin:0;max-width:30ch;color:var(--mute);font-weight:600;line-height:1.5}
+.cstart .ics{display:flex;gap:18px;align-items:center}
+.cstart .ics svg{width:44px;height:44px}
+.cstart .timer{font-family:"Unbounded",sans-serif;font-size:26px;color:#ffd36a}
 </style>
 <script>
 (function(){
@@ -345,6 +366,7 @@ body.ing #v-menu{display:none}
   <div class="hwtag">🎃 Хэллоуин в УродVPN · скидка −15% до 6 ноября 🦇</div>
   <div class="top in">
     <div class="hello">Привет,<b id="name">друг</b></div>
+    <div id="sale" class="salebn" hidden></div>
     <a class="glass chip" id="chan" href="https://t.me/MyUrodVPN" style="color:inherit;text-decoration:none">Канал</a>
   </div>
 
@@ -393,6 +415,10 @@ body.ing #v-menu{display:none}
     <div class="gfly" id="gfly"></div>
     <div class="gbot"><div><b>Копай Гробы</b><span>Попытка раз в 12 часов</span></div><button class="gplay" id="gplay" type="button">Играть</button></div>
   </section>
+  <section class="gban cb" id="gcatch">
+    <div class="cfall" id="cfall"></div>
+    <div class="gbot"><div><b>Лови Токены</b><span>Награда за ловкость · раз в 4 часа</span></div><button class="gplay" id="cplay" type="button">Играть</button></div>
+  </section>
 </main>
 
 <nav class="glass tabs" id="tabs" aria-label="Разделы">
@@ -400,6 +426,19 @@ body.ing #v-menu{display:none}
   <button class="tab" type="button" data-t="games"><svg viewBox="0 0 24 24"><path d="M15.5 3.5 20.5 8.5l-2.2 2.2-5-5z"/><path d="M13.3 8.7 6.2 15.8"/><path d="M4.5 14.3 9.7 19.5 5.6 20.4 3.6 18.4z"/></svg><span>Игры</span></button>
 </nav>
 
+<div class="game cgame" id="cgame" hidden>
+  <div class="chud"><button class="gx" id="cx" type="button" aria-label="Закрыть">✕</button><b id="cscore">0</b><span class="gtimer" id="ctime">30</span></div>
+  <div class="cbar"><i id="cprog"></i></div>
+  <canvas id="ccv"></canvas>
+  <div class="cstart" id="cstart">
+    <h2>Лови Токены</h2>
+    <div class="ics" id="cics"></div>
+    <p id="chelp">Двигай корзину пальцем и лови токены и монеты. Бомба сжигает все очки. На всё 30 секунд.</p>
+    <div class="timer" id="cwait"></div>
+    <button class="gplay" id="cgo" type="button">Старт</button>
+  </div>
+  <div class="gmod" id="crew" hidden><div class="gcard grw" id="crewc"></div></div>
+</div>
 <div class="game" id="game" hidden>
   <div class="gbg"></div>
   <div class="gtop"><button class="gx" id="gx" type="button" aria-label="Закрыть">✕</button><b>Копай Гробы</b><span class="gtimer" id="gtimer"></span></div>
@@ -774,7 +813,7 @@ body.ing #v-menu{display:none}
     rub:'<svg viewBox="0 0 64 64"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7bf0b0"/><stop offset="1" stop-color="#1fa66a"/></linearGradient></defs><rect x="3" y="14" width="58" height="36" rx="7" fill="url(#gr)" stroke="#d6ffe8" stroke-width="2"/><circle cx="32" cy="32" r="12" fill="#0f6b43" fill-opacity=".45"/><text x="32" y="39" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="20" fill="#fff">₽</text><circle cx="11" cy="32" r="3" fill="#d6ffe8" fill-opacity=".8"/><circle cx="53" cy="32" r="3" fill="#d6ffe8" fill-opacity=".8"/></svg>',
     day:'<svg viewBox="0 0 64 64"><defs><linearGradient id="gd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ef3ff"/><stop offset="1" stop-color="#4b7bff"/></linearGradient></defs><path d="M32 4 56 13v18c0 15-10 25-24 29C18 56 8 46 8 31V13z" fill="url(#gd)" stroke="#fff" stroke-opacity=".8" stroke-width="2.4"/><path d="M20 32l8 8 17-18" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
   };
-  var fly=$('gfly'); if(fly) fly.innerHTML='<i>'+IC.tok+'</i><i>'+IC.coin+'</i><i>'+IC.rub+'</i>';
+  var fly=$('gfly'); if(fly) fly.innerHTML='<i>'+IC.tok+'</i><i>'+IC.coin+'</i><i>'+IC.day+'</i>';
 
   var tabs=document.querySelectorAll('.tab'), vm=$('v-menu'), vg=$('v-games');
   function showTab(t){
@@ -899,6 +938,103 @@ body.ing #v-menu{display:none}
     loadState();
   };
   $('gx').onclick=function(){ if(busy) return; $('game').hidden=true; $('tabs').style.display=''; stopTimer(); $('gconf').hidden=true; $('grew').hidden=true; };
+
+  var cf=$('cfall'); if(cf){ var tt=[IC.tok,IC.coin,IC.tok,IC.coin,IC.tok,IC.coin,IC.tok,IC.coin,IC.tok]; tt.forEach(function(sv,i){ var e=document.createElement('i'); e.innerHTML=sv; e.style.left=(7+i*9.6)+'%'; e.style.animationDuration=(3.2+(i%4)*.7)+'s'; e.style.animationDelay=(-i*.55)+'s'; cf.appendChild(e); }); }
+  var BOMB='<svg viewBox="0 0 64 64"><circle cx="30" cy="38" r="21" fill="#1c1c26" stroke="#8a8aa6" stroke-width="2.4"/><ellipse cx="23" cy="30" rx="6" ry="4" fill="#fff" fill-opacity=".25"/><path d="M42 20c4-5 8-5 11-9" fill="none" stroke="#c9a15a" stroke-width="3.5" stroke-linecap="round"/><circle cx="55" cy="9" r="5" fill="#ffb02e"/><circle cx="55" cy="9" r="2.6" fill="#fff4b0"/><path d="M25 38h10M30 33v10" stroke="#ff4d5e" stroke-width="3.4" stroke-linecap="round" transform="rotate(45 30 38)"/></svg>';
+  var CAULD='<svg viewBox="0 0 96 64"><ellipse cx="48" cy="14" rx="40" ry="10" fill="#1a0f33" stroke="#b58bff" stroke-width="3"/><path d="M8 14c0 30 12 46 40 46s40-16 40-46" fill="#2b1a55" stroke="#b58bff" stroke-width="3"/><ellipse cx="48" cy="14" rx="32" ry="6" fill="#5ee6ff" fill-opacity=".55"/></svg>';
+  function img(sv){ var i=new Image(); i.src='data:image/svg+xml;utf8,'+encodeURIComponent(sv.replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" ')); return i; }
+  var CI={tok:img(IC.tok),coin:img(IC.coin),bomb:img(BOMB),cauld:img(CAULD)};
+  var ci=$('cics'); if(ci) ci.innerHTML=IC.tok+IC.coin+BOMB;
+
+  var cv=$('ccv'), cx2=cv.getContext('2d'), cg=null, cwaitTimer=null, cuntil=0;
+  function cfmt(n){ return fmt(n); }
+  function cstop(){ if(cg){ cg.run=false; cancelAnimationFrame(cg.raf); cg=null; } }
+  function cresize(){ var d=window.devicePixelRatio||1; cv.width=cv.clientWidth*d; cv.height=cv.clientHeight*d; cx2.setTransform(d,0,0,d,0,0); }
+  function cmenu(wait){
+    $('cstart').hidden=false; var go=$('cgo'), w=$('cwait');
+    if(cwaitTimer){ clearInterval(cwaitTimer); cwaitTimer=null; }
+    if(wait>0){
+      go.style.display='none'; cuntil=Date.now()+wait*1000;
+      var t=function(){ var l=Math.round((cuntil-Date.now())/1000); if(l<=0){ clearInterval(cwaitTimer); cwaitTimer=null; copen(); return; } w.textContent='Следующая игра через '+cfmt(l); };
+      t(); cwaitTimer=setInterval(t,1000);
+    } else { go.style.display=''; w.textContent=''; }
+  }
+  function copen(){
+    if(!inTG){ cmenu(0); $('chelp').textContent='Открой игру внутри Telegram.'; $('cgo').style.display='none'; return; }
+    call('/api/catch/state').then(function(j){
+      if(j && j.ok) cmenu(j.wait); else { cmenu(0); $('cgo').style.display='none'; $('cwait').textContent='Игра временно недоступна'; }
+    }).catch(function(){ cmenu(0); $('cgo').style.display='none'; $('cwait').textContent='Нет связи с сервером'; });
+  }
+  $('cplay').onclick=function(){
+    $('cgame').hidden=false; $('tabs').style.display='none'; haptic('medium'); $('chelp').textContent='Двигай корзину пальцем и лови токены и монеты. Бомба сжигает все очки. На всё 30 секунд.'; $('cscore').textContent='0'; $('ctime').textContent='30'; $('cprog').style.transform='scaleX(1)'; cresize(); copen();
+  };
+  $('cx').onclick=function(){ if(cg && cg.run) return; $('cgame').hidden=true; $('tabs').style.display=''; if(cwaitTimer){ clearInterval(cwaitTimer); cwaitTimer=null; } $('crew').hidden=true; };
+  $('cgo').onclick=function(){
+    var b=$('cgo'); b.disabled=true;
+    call('/api/catch/start').then(function(j){
+      b.disabled=false;
+      if(j && j.ok && j.rid){ $('cstart').hidden=true; cplay(j.rid, j.dur||20); }
+      else if(j && j.ok && j.wait){ cmenu(j.wait); }
+      else { $('cwait').textContent='Не получилось начать'; }
+    }).catch(function(){ b.disabled=false; $('cwait').textContent='Нет связи с сервером'; });
+  };
+  function cplay(rid, dur){
+    cresize();
+    var W=cv.clientWidth, H=cv.clientHeight, bw=Math.min(120,W*.3), bh=bw*.66;
+    cg={run:true,rid:rid,score:0,items:[],t0:performance.now(),last:performance.now(),spawn:0,bx:W/2,tx:W/2,shake:0,pop:[]};
+    var move=function(e){ var r=cv.getBoundingClientRect(); var x=(e.touches?e.touches[0].clientX:e.clientX)-r.left; if(cg) cg.tx=Math.max(bw/2,Math.min(W-bw/2,x)); };
+    cv.onpointermove=move; cv.onpointerdown=move; cv.ontouchmove=function(e){ e.preventDefault(); move(e); };
+    function frame(now){
+      if(!cg||!cg.run) return;
+      var g=cg, dt=Math.min(.05,(now-g.last)/1000); g.last=now;
+      var el=(now-g.t0)/1000, left=Math.max(0,dur-el);
+      g.spawn-=dt;
+      if(g.spawn<=0 && left>.6){
+        g.spawn=Math.max(.17,.4-el*.007)*(.8+Math.random()*.5);
+        var r=Math.random(), type=r<.15?'bomb':(r<.28?'coin':'tok');
+        g.items.push({x:30+Math.random()*(W-60),y:-40,v:(type==='bomb'?250:225)*(H/800)+el*7+Math.random()*60,t:type,s:type==='coin'?44:40,a:Math.random()*6});
+      }
+      g.bx+=(g.tx-g.bx)*Math.min(1,dt*14);
+      var by=H-bh-34;
+      cx2.clearRect(0,0,W,H);
+      var ox=g.shake>0?(Math.random()-.5)*8:0; g.shake=Math.max(0,g.shake-dt);
+      cx2.save(); cx2.translate(ox,0);
+      for(var i=g.items.length-1;i>=0;i--){
+        var it=g.items[i]; it.y+=it.v*dt; it.a+=dt*3;
+        var hit=it.y+it.s*.6>by && it.y<by+bh*.5 && Math.abs(it.x-g.bx)<bw*.5+it.s*.25;
+        if(hit){
+          if(it.t==='bomb'){ g.score=0; g.shake=.5; g.flash=.35; haptic('heavy'); notify('error'); g.pop.push({x:it.x,y:by,t:'БУМ! 0',c:'#ff6a7a',l:.9}); }
+          else { var pts=it.t==='coin'?3:1; g.score+=pts; haptic('light'); g.pop.push({x:it.x,y:by,t:'+'+pts,c:'#ffe27a',l:.6}); }
+          g.items.splice(i,1); $('cscore').textContent=g.score; continue;
+        }
+        if(it.y>H+50){ g.items.splice(i,1); continue; }
+        cx2.save(); cx2.translate(it.x,it.y); cx2.rotate(Math.sin(it.a)*.3); cx2.drawImage(CI[it.t],-it.s/2,-it.s/2,it.s,it.s); cx2.restore();
+      }
+      cx2.drawImage(CI.cauld,g.bx-bw/2,by,bw,bh);
+      for(var k=g.pop.length-1;k>=0;k--){ var p=g.pop[k]; p.l-=dt; p.y-=dt*60; if(p.l<=0){ g.pop.splice(k,1); continue; } cx2.globalAlpha=Math.min(1,p.l*2); cx2.fillStyle=p.c; cx2.font='800 22px Unbounded,sans-serif'; cx2.textAlign='center'; cx2.fillText(p.t,p.x,p.y); cx2.globalAlpha=1; }
+      cx2.restore();
+      if(g.flash>0){ cx2.fillStyle='rgba(255,70,70,'+(g.flash*1.6)+')'; cx2.fillRect(0,0,W,H); g.flash-=dt; }
+      $('ctime').textContent=Math.ceil(left); $('cprog').style.transform='scaleX('+(left/dur)+')';
+      if(left<=0){ cend(); return; }
+      g.raf=requestAnimationFrame(frame);
+    }
+    cg.raf=requestAnimationFrame(frame);
+  }
+  function cend(){
+    var g=cg; if(!g) return; g.run=false; var sc=g.score, rid=g.rid; cg=null; cx2.clearRect(0,0,cv.width,cv.height); cv.onpointermove=null; cv.onpointerdown=null; cv.ontouchmove=null;
+    var rc=$('crewc'); rc.innerHTML='<div class="ic">'+IC.tok+'</div><h2 style="font-size:24px">Время!</h2><p>Очков: '+sc+'</p><p id="cres">Считаем награду…</p><button class="gyes" id="cok" type="button" style="display:none">Отлично</button>';
+    $('crew').hidden=false;
+    var done=function(){ var o=$('cok'); o.style.display=''; o.onclick=function(){ $('crew').hidden=true; cmenu(14400); }; };
+    call('/api/catch/finish',{rid:rid,score:sc}).then(function(j){
+      if(j && j.ok){
+        var w=j.wait||14400;
+        if(j.tokens>0){ rc.innerHTML='<div class="rays"></div><div class="ic">'+IC.tok+'</div><h2>+'+j.tokens+'</h2><h2 style="font-size:22px;color:#fff">токенов</h2><p>Поймано очков: '+j.score+'. Награда уже в боте</p><button class="gyes" id="cok" type="button">Отлично</button>'; notify('success'); if(j.tokens>=5) confetti(); }
+        else { $('cres').textContent='Нужно хотя бы 8 очков для награды. В следующий раз получится!'; }
+        var o=$('cok'); if(o){ o.style.display=''; o.onclick=function(){ $('crew').hidden=true; cmenu(w); }; }
+      } else { $('cres').textContent='Не удалось засчитать игру.'; done(); }
+    }).catch(function(){ $('cres').textContent='Нет связи с сервером, награда не засчитана.'; done(); });
+  }
+
 })();
 </script>
 </body>
