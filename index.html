@@ -226,6 +226,97 @@ html.hw .hwf{display:block}
 @keyframes hwfall{to{transform:translateY(112vh) rotate(40deg)}}
 .hwtag{display:none;margin:0 0 14px;padding:10px 14px;border-radius:18px;font-size:13px;font-weight:800;text-align:center;color:#ffd9a8;background:linear-gradient(135deg,rgba(255,110,20,.28),rgba(140,50,255,.28));border:1px solid rgba(255,160,70,.4)}
 html.hw .hwtag{display:block}
+.wrap{padding-bottom:calc(230px + var(--sab))}
+.bar{bottom:calc(86px + var(--sab))}
+body.ing .bar{display:none}
+body.ing #v-menu{display:none}
+.tabs{position:fixed;left:50%;bottom:calc(12px + var(--sab));transform:translateX(-50%);width:min(330px,calc(100% - 28px));display:flex;gap:4px;padding:6px;border-radius:999px;z-index:6}
+.tab{flex:1;border:0;background:none;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 6px 7px;border-radius:999px;font:700 11.5px "Manrope",sans-serif;cursor:pointer;transition:background .25s,color .25s}
+.tab svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tab.on{color:var(--text);background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.tab.on svg{stroke:var(--cyan)}
+#v-games{padding-bottom:calc(130px + var(--sab))}
+.gh{font-family:"Unbounded",sans-serif;font-weight:800;font-size:26px;margin:6px 4px 18px}
+.gban{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--glass-b);box-shadow:0 18px 44px -14px rgba(0,0,0,.7),0 0 36px -10px rgba(255,130,40,.45);background:#120a22}
+.gban img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.gban::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(8,4,16,.88) 100%);pointer-events:none}
+.ghole{position:absolute;left:50%;top:90%;width:30%;height:7%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.7),transparent);box-shadow:0 0 28px 8px rgba(255,140,40,.3);animation:hpulse 2.6s ease-in-out infinite}
+@keyframes hpulse{50%{box-shadow:0 0 40px 14px rgba(255,160,50,.55)}}
+.gfly{position:absolute;left:50%;top:90%;width:0;height:0;z-index:2}
+.gfly i{position:absolute;left:0;top:0;width:46px;height:46px;opacity:0;animation:gfl 4.8s ease-in-out infinite}
+.gfly i svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.gfly i:nth-child(1){--dx:-92px;--dy:-120px;--r:-18deg;animation-delay:0s}
+.gfly i:nth-child(2){--dx:0px;--dy:-168px;--r:10deg;animation-delay:.45s}
+.gfly i:nth-child(3){--dx:92px;--dy:-120px;--r:22deg;animation-delay:.9s}
+@keyframes gfl{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}
+10%{opacity:1}
+34%{opacity:1;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.05) rotate(var(--r))}
+48%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy) - 10px)) scale(1) rotate(calc(var(--r) * -.6))}
+62%{opacity:1;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1) rotate(var(--r))}
+86%{opacity:1;transform:translate(-50%,-50%) scale(.45) rotate(0)}
+100%{opacity:0;transform:translate(-50%,-50%) scale(.1) rotate(0)}}
+.gtt{position:absolute;left:0;right:0;top:7%;z-index:3;text-align:center;font-family:"Unbounded",sans-serif;font-weight:800;font-size:clamp(30px,10.5vw,52px);line-height:1;text-transform:uppercase;color:#fff7e6;-webkit-text-stroke:2px #ff8a1f;paint-order:stroke fill;text-shadow:0 0 22px rgba(255,140,30,.9),0 4px 0 #b34a00;letter-spacing:-.01em;pointer-events:none}
+.gbot{position:absolute;left:16px;right:16px;bottom:14px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gbot b{display:block;font-size:17px;font-weight:800}
+.gbot span{font-size:12.5px;color:var(--mute)}
+.gplay{border:0;cursor:pointer;flex:none;padding:13px 28px;border-radius:999px;font:800 16px "Manrope",sans-serif;color:#2a1600;background:linear-gradient(135deg,#ffe27a,#ffa928);box-shadow:inset 0 1px 0 #fff6c8,0 10px 26px -6px rgba(255,170,40,.8);transition:transform .2s}
+.gplay:active{transform:scale(.94)}
+.game{position:fixed;inset:0;z-index:50;background:#0a0514;display:flex;flex-direction:column;overflow:hidden}
+.game[hidden]{display:none}
+.gbg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,5,20,.35),rgba(10,5,20,.72)),url(grobi-bg.jpg) center/cover no-repeat}
+.gbg::after{content:"";position:absolute;left:-20%;right:-20%;bottom:0;height:45%;background:radial-gradient(closest-side,rgba(150,70,255,.35),transparent);animation:fog 9s ease-in-out infinite alternate}
+@keyframes fog{to{transform:translateX(12%) scale(1.15)}}
+.gtop{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--sat) + 14px) 16px 8px}
+.gtop b{font-family:"Unbounded",sans-serif;font-size:16px}
+.gx{width:40px;height:40px;border-radius:50%;border:1px solid var(--glass-b);background:rgba(255,255,255,.1);color:#fff;font-size:18px;cursor:pointer}
+.gtimer{min-width:40px;text-align:right;font-weight:800;font-size:13px;color:#ffd36a}
+.gstage{position:relative;z-index:2;flex:1;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:20px 8px;padding:10px 14px}
+.cf{position:relative;width:29%;max-width:132px;aspect-ratio:100/160;border:0;background:none;padding:0;cursor:pointer;animation:cfl 3.4s ease-in-out infinite;filter:drop-shadow(0 10px 14px rgba(0,0,0,.65))}
+.cf:nth-child(2n){animation-delay:-1.1s}.cf:nth-child(3n){animation-delay:-2.2s}
+@keyframes cfl{50%{transform:translateY(-7px) rotate(1.2deg)}}
+.cf:active{transform:scale(.94)}
+.cf svg{width:100%;height:100%;overflow:visible}
+.cf.dead{cursor:default;animation:none;filter:none}
+.cf.dig{animation:cfs .12s linear infinite}
+@keyframes cfs{0%{transform:translate(-3px,0) rotate(-2deg)}50%{transform:translate(3px,-2px) rotate(2deg)}100%{transform:translate(-3px,0) rotate(-2deg)}}
+.cf .lid{transition:transform .7s cubic-bezier(.3,1.4,.5,1),opacity .6s;transform-origin:50% 0}
+.cf.open .lid{transform:translate(34px,-26px) rotate(34deg);opacity:0}
+.cf .inn{opacity:0;transition:opacity .5s}
+.cf.open .inn{opacity:1}
+.gdirt{position:fixed;z-index:9;width:9px;height:9px;border-radius:50%;background:#6a4326;pointer-events:none;animation:gdr .9s ease-out forwards}
+@keyframes gdr{to{transform:translate(var(--x),var(--y)) scale(.4);opacity:0}}
+.gshov{position:fixed;z-index:9;width:80px;height:80px;pointer-events:none;animation:gsh .5s ease-in-out 3}
+@keyframes gsh{0%{transform:rotate(40deg) translateY(-26px)}55%{transform:rotate(-8deg) translateY(10px)}100%{transform:rotate(40deg) translateY(-26px)}}
+.gmsg{position:relative;z-index:3;text-align:center;padding:4px 20px calc(36px + var(--sab));min-height:84px;color:var(--mute);font-size:15px;font-weight:600}
+.gmsg b{display:block;color:#ffd36a;font-size:24px;font-family:"Unbounded",sans-serif;margin-bottom:6px}
+.gmsg button{margin-top:10px}
+.gmod{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(5,2,12,.7);padding:24px}
+.gmod[hidden]{display:none}
+.gcard{width:min(340px,100%);padding:26px 22px;border-radius:30px;text-align:center;background:linear-gradient(145deg,#2a1546,#150a26);border:1px solid rgba(255,170,60,.45);box-shadow:0 24px 60px -10px #000,0 0 50px -14px rgba(255,150,40,.6);animation:gin .35s cubic-bezier(.2,1.5,.4,1)}
+@keyframes gin{from{transform:scale(.7);opacity:0}}
+.gcard h3{margin:0 0 18px;font-size:21px}
+.gbtns{display:flex;gap:12px}
+.gbtns button{flex:1;border:0;cursor:pointer;padding:15px 10px;border-radius:999px;font:800 17px "Manrope",sans-serif}
+.gyes{color:#2a1600;background:linear-gradient(135deg,#ffe27a,#ffa928);box-shadow:0 8px 22px -6px rgba(255,170,40,.8)}
+.gno{color:#e9e9ee;background:#5b5b66}
+.grw{position:relative;overflow:visible;text-align:center}
+.grw .rays{position:absolute;left:50%;top:50%;width:520px;height:520px;margin:-260px 0 0 -260px;background:repeating-conic-gradient(from 0deg,rgba(255,200,80,.28) 0 10deg,transparent 10deg 20deg);border-radius:50%;-webkit-mask:radial-gradient(closest-side,#000 25%,transparent 100%);mask:radial-gradient(closest-side,#000 25%,transparent 100%);animation:spin 9s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.grw .ic{position:relative;width:150px;height:150px;margin:0 auto 14px;animation:rpop .8s cubic-bezier(.2,1.6,.35,1)}
+.grw .ic svg{width:100%;height:100%;filter:drop-shadow(0 0 24px rgba(255,200,80,.9))}
+@keyframes rpop{from{transform:scale(.1) rotate(-30deg);opacity:0}}
+.grw h2{position:relative;margin:0 0 6px;font-family:"Unbounded",sans-serif;font-size:30px;color:#ffe27a;text-shadow:0 0 22px rgba(255,170,40,.8)}
+.grw p{position:relative;margin:0 0 20px;color:var(--mute);font-weight:600}
+.grw .gyes{position:relative;border:0;cursor:pointer;padding:15px 38px;border-radius:999px;font:800 17px "Manrope",sans-serif}
+.gcf{position:fixed;z-index:30;top:-14px;width:9px;height:14px;pointer-events:none;animation:gcf 2.6s ease-in forwards}
+@keyframes gcf{to{transform:translate(var(--x),105vh) rotate(720deg)}}
+.gload{position:absolute;inset:0;z-index:40;background:#0a0514;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:var(--mute);font-weight:700;transition:opacity .4s}
+.gload svg{width:84px;height:84px;animation:lsw 1s ease-in-out infinite}
+@keyframes lsw{50%{transform:rotate(-25deg) translateY(6px)}}
+.gload.off{opacity:0;pointer-events:none}
+.gload .bar2{width:180px;height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
+.gload .bar2 i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffa928,#ffe27a);animation:ld .9s ease-out forwards}
+@keyframes ld{to{width:100%}}
 </style>
 <script>
 (function(){
@@ -250,10 +341,11 @@ html.hw .hwtag{display:block}
   <img class="mini" src="logo.jpg" alt="" width="34" height="34"><span class="ttl">УродVPN</span><span class="sumh roll" id="sumh" aria-hidden="true"></span>
 </header>
 
-<main class="wrap">
+<main class="wrap" id="v-menu">
   <div class="hwtag">🎃 Хэллоуин в УродVPN · скидка −15% до 6 ноября 🦇</div>
   <div class="top in">
     <div class="hello">Привет,<b id="name">друг</b></div>
+    <div id="sale" class="salebn" hidden></div>
     <a class="glass chip" id="chan" href="https://t.me/MyUrodVPN" style="color:inherit;text-decoration:none">Канал</a>
   </div>
 
@@ -292,6 +384,31 @@ html.hw .hwtag{display:block}
 <div class="glass bar in" id="bar">
   <div class="sum"><small id="sumName">100 ГБ · 30 дней</small><b id="sum" class="roll" aria-live="polite" aria-label="79 ₽"></b></div>
   <button class="pay" id="pay">К оплате</button>
+</div>
+
+<main class="wrap" id="v-games" hidden>
+  <h2 class="gh">Игры</h2>
+  <section class="gban" id="gban">
+    <img src="grobi-banner.jpg" alt="Копай Гробы" width="880" height="614">
+    <div class="gtt">Копай<br>Гробы</div><div class="ghole"></div>
+    <div class="gfly" id="gfly"></div>
+    <div class="gbot"><div><b>Копай Гробы</b><span>Попытка раз в 12 часов</span></div><button class="gplay" id="gplay" type="button">Играть</button></div>
+  </section>
+</main>
+
+<nav class="glass tabs" id="tabs" aria-label="Разделы">
+  <button class="tab on" type="button" data-t="menu"><svg viewBox="0 0 24 24"><path d="M3.5 11.2 12 4l8.5 7.2"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>Меню</span></button>
+  <button class="tab" type="button" data-t="games"><svg viewBox="0 0 24 24"><path d="M15.5 3.5 20.5 8.5l-2.2 2.2-5-5z"/><path d="M13.3 8.7 6.2 15.8"/><path d="M4.5 14.3 9.7 19.5 5.6 20.4 3.6 18.4z"/></svg><span>Игры</span></button>
+</nav>
+
+<div class="game" id="game" hidden>
+  <div class="gbg"></div>
+  <div class="gtop"><button class="gx" id="gx" type="button" aria-label="Закрыть">✕</button><b>Копай Гробы</b><span class="gtimer" id="gtimer"></span></div>
+  <div class="gstage" id="gstage"></div>
+  <div class="gmsg" id="gmsg"></div>
+  <div class="gmod" id="gconf" hidden><div class="gcard"><h3>Точно хотите раскопать?</h3><div class="gbtns"><button class="gyes" id="gyes" type="button">Да</button><button class="gno" id="gno" type="button">Нет</button></div></div></div>
+  <div class="gmod" id="grew" hidden><div class="gcard grw" id="grewc"></div></div>
+  <div class="gload" id="gload"><svg viewBox="0 0 64 64" fill="none"><path d="M44 6 58 20l-6 6-14-14z" fill="#c9cdd8"/><path d="M38 24 18 44" stroke="#8a5a2e" stroke-width="5" stroke-linecap="round"/><path d="M14 40 28 54 12 58z" fill="#9aa0b0"/></svg><span>Загрузка игры…</span><div class="bar2"><i></i></div></div>
 </div>
 
 <div class="scrim" id="scrim"></div>
@@ -451,25 +568,16 @@ html.hw .hwtag{display:block}
   }
   document.getElementById('minus').onclick=function(){ if(state.dev>1){state.dev--; haptic('light'); render();} };
   document.getElementById('plus').onclick =function(){ if(state.dev<MAX_DEV){state.dev++; haptic('light'); render();} };
+
   document.getElementById('pay').onclick = function(){
     haptic('medium');
     if (api.ok){ methods(); return; }
-    var p = cur(), d = p.fixed||state.dev, payload = 'buy_'+p.key+'_'+d, url = 'https://t.me/MyUrodVPNBot?start='+payload;
+    var p = cur(), d = p.fixed||state.dev, payload = 'buy_'+p.key+'_'+d, url = 'https://t.me/'+BOT+'?start='+payload;
     openSheet('<button class="x" type="button" aria-label="Закрыть">✕</button><h3>Ваш заказ</h3><p class="sub">Оплата проходит в чате с ботом: там выберете способ и получите ссылку на оплату.</p>'+
       '<div class="orders"><div class="orow"><span>Тариф</span><b>'+esc(p.name)+'</b></div><div class="orow"><span>Устройства</span><b>'+d+'</b></div><div class="orow tot"><span>Итого</span><b>'+total()+' ₽</b></div></div>'+
       '<a class="btn2" id="toBotA" href="'+url+'" style="display:block;text-align:center;text-decoration:none">Продолжить в боте</a>'+
       '<p class="tiny" style="margin-top:12px">Если бот не открылся, отправьте ему сообщение: <b>/start '+payload+'</b></p>');
-   document.getElementById('toBotA').onclick = function(e) {
-   e.preventDefault();
-    var tg = window.Telegram.WebApp;
-    var url = 'https://t.me/MyUrodVPNBot?start=' +
-        encodeURIComponent(payload);
-    try {
-        tg.openLink(url);
-    } catch (err) {
-        alert('Ошибка: ' + err.message);
-    }
-  };
+    document.getElementById('toBotA').onclick=function(e){ e.preventDefault(); haptic('heavy'); toBot(payload); };
   };
 
   document.addEventListener('pointermove', function(e){
@@ -538,18 +646,12 @@ html.hw .hwtag{display:block}
         '<div class="facts" style="grid-template-columns:1fr"><div><b>'+snap.bal+' ₽</b><span>баланс</span></div></div>';
     }
   }
-  function toBot(payload) {
-    var url = 'https://t.me/MyUrodVPNBot?start=' + encodeURIComponent(payload);
-    var tg = window.Telegram && window.Telegram.WebApp;
-    if (tg && typeof tg.openTelegramLink === 'function') {
-        try {
-            tg.openTelegramLink(url);
-            return;
-        } catch (e) {
-            console.error(e);
-        }
-    }
-    window.open(url, '_blank');
+  var BOT='MyUrodVPNBot';
+  function toBot(payload){
+    var u='https://t.me/'+BOT+'?start='+payload;
+    try{ if(tg && tg.openTelegramLink){ tg.openTelegramLink(u); setTimeout(function(){ try{tg.close();}catch(e){} },900); return; } }catch(e){}
+    try{ if(tg && tg.openLink){ tg.openLink(u); return; } }catch(e){}
+    location.href=u;
   }
   function copyText(text, btn){
     var done=function(){ if(btn){ var o=btn.textContent; btn.textContent='Скопировано'; haptic('light'); setTimeout(function(){btn.textContent=o},1800);} };
@@ -652,6 +754,152 @@ html.hw .hwtag{display:block}
     },3000);
   }
   render();
+})();
+</script>
+<script>
+(function(){
+  var tg=window.Telegram&&Telegram.WebApp, inTG=!!(tg&&tg.initData), API='https://pay.dublikata.space';
+  var $=function(i){return document.getElementById(i)};
+  function haptic(k){ try{ tg.HapticFeedback.impactOccurred(k||'light'); }catch(e){} }
+  function notify(k){ try{ tg.HapticFeedback.notificationOccurred(k); }catch(e){} }
+  function call(path,body){
+    var ctl=new AbortController(), to=setTimeout(function(){ctl.abort()},12000);
+    body=body||{}; body.initData=tg.initData;
+    return fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ctl.signal})
+      .then(function(r){ clearTimeout(to); return r.json().then(function(j){ j._status=r.status; return j; }); });
+  }
+
+  var IC={
+    tok:'<svg viewBox="0 0 64 64"><defs><linearGradient id="gt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9a4ff"/><stop offset="1" stop-color="#4fd8ff"/></linearGradient></defs><polygon points="32,3 57,17 57,47 32,61 7,47 7,17" fill="url(#gt)" stroke="#fff" stroke-opacity=".7" stroke-width="2"/><path d="M32 16l4.6 10.4L48 28l-8.4 7.6L42 47l-10-6-10 6 2.4-11.4L16 28l11.4-1.6z" fill="#fff" fill-opacity=".92"/></svg>',
+    coin:'<svg viewBox="0 0 64 64"><defs><radialGradient id="gc" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#fff3a8"/><stop offset=".55" stop-color="#ffc83a"/><stop offset="1" stop-color="#c47a0a"/></radialGradient></defs><circle cx="32" cy="32" r="29" fill="url(#gc)" stroke="#fff0b0" stroke-width="2"/><circle cx="32" cy="32" r="21" fill="none" stroke="#b46d08" stroke-opacity=".6" stroke-width="3"/><path d="M22 14c6-4 14-4 20 0" stroke="#fff" stroke-opacity=".7" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+    rub:'<svg viewBox="0 0 64 64"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7bf0b0"/><stop offset="1" stop-color="#1fa66a"/></linearGradient></defs><rect x="3" y="14" width="58" height="36" rx="7" fill="url(#gr)" stroke="#d6ffe8" stroke-width="2"/><circle cx="32" cy="32" r="12" fill="#0f6b43" fill-opacity=".45"/><text x="32" y="39" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" font-size="20" fill="#fff">₽</text><circle cx="11" cy="32" r="3" fill="#d6ffe8" fill-opacity=".8"/><circle cx="53" cy="32" r="3" fill="#d6ffe8" fill-opacity=".8"/></svg>',
+    day:'<svg viewBox="0 0 64 64"><defs><linearGradient id="gd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ef3ff"/><stop offset="1" stop-color="#4b7bff"/></linearGradient></defs><path d="M32 4 56 13v18c0 15-10 25-24 29C18 56 8 46 8 31V13z" fill="url(#gd)" stroke="#fff" stroke-opacity=".8" stroke-width="2.4"/><path d="M20 32l8 8 17-18" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+  var fly=$('gfly'); if(fly) fly.innerHTML='<i>'+IC.tok+'</i><i>'+IC.coin+'</i><i>'+IC.rub+'</i>';
+
+  var tabs=document.querySelectorAll('.tab'), vm=$('v-menu'), vg=$('v-games');
+  function showTab(t){
+    tabs.forEach(function(b){ b.classList.toggle('on', b.dataset.t===t); });
+    vm.hidden=(t==='games'); vg.hidden=(t!=='games');
+    document.body.classList.toggle('ing', t==='games');
+    window.scrollTo(0,0); haptic('light');
+  }
+  tabs.forEach(function(b){ b.addEventListener('click', function(){ showTab(b.dataset.t); }); });
+
+  var PAL=[['#5a3620','#7d4b2c','#d9b27a'],['#22222c','#3a3b49','#a9acc2'],['#432368','#6a3fb5','#d6b8ff'],['#c9b88e','#e9dfc3','#6b5a34'],['#2e4f36','#47794f','#bff0c6'],['#6a1d1d','#9c3030','#ffc9b8']];
+  var DEC=[
+    '<rect x="46" y="38" width="8" height="56" rx="2"/><rect x="32" y="52" width="36" height="8" rx="2"/>',
+    '<rect x="46" y="32" width="8" height="70" rx="2"/><rect x="36" y="46" width="28" height="7" rx="2"/><rect x="36" y="66" width="28" height="7" rx="2"/>',
+    '<circle cx="50" cy="62" r="17"/><rect x="40" y="76" width="20" height="14" rx="3"/><circle cx="43" cy="60" r="4.5" fill="#000"/><circle cx="57" cy="60" r="4.5" fill="#000"/>',
+    '<path d="M34 48 66 90M66 48 34 90" stroke-width="8" stroke-linecap="round" stroke="currentColor" fill="none"/><circle cx="50" cy="69" r="8"/>',
+    '<path d="M50 56c-6-10-22-10-28-2 6 0 8 4 10 8 2-4 6-6 8-4 2-2 6 0 8 4 2-4 4-8 10-8-6-8-22-8-28 2z" transform="translate(0 6)"/><circle cx="50" cy="66" r="5"/>',
+    '<circle cx="50" cy="66" r="20" fill="none" stroke="currentColor" stroke-width="5"/><path d="M50 52v28M40 60l20 12M60 60 40 72" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>'
+  ];
+  var uid=0;
+  function coffin(skin){
+    var p=PAL[skin%PAL.length], id='c'+(uid++);
+    return '<svg viewBox="0 0 100 160"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="'+p[0]+'"/><stop offset=".5" stop-color="'+p[1]+'"/><stop offset="1" stop-color="'+p[0]+'"/></linearGradient></defs>'+
+      '<polygon points="30,6 70,6 94,52 72,154 28,154 6,52" fill="#0a0410"/>'+
+      '<g class="inn"><polygon points="30,6 70,6 94,52 72,154 28,154 6,52" fill="#1a0a2a"/><circle cx="50" cy="80" r="46" fill="#ffc94a" fill-opacity=".55"/></g>'+
+      '<g class="lid"><polygon points="30,6 70,6 94,52 72,154 28,154 6,52" fill="url(#'+id+')" stroke="'+p[2]+'" stroke-opacity=".55" stroke-width="2.4"/>'+
+      '<polygon points="34,16 66,16 85,54 66,142 34,142 15,54" fill="none" stroke="'+p[2]+'" stroke-opacity=".28" stroke-width="2"/>'+
+      '<g fill="'+p[2]+'" color="'+p[2]+'" fill-opacity=".92">'+DEC[skin%DEC.length]+'</g></g></svg>';
+  }
+  function mound(){
+    return '<svg viewBox="0 0 100 160"><ellipse cx="50" cy="128" rx="46" ry="14" fill="#000" fill-opacity=".35"/><path d="M6 128c4-34 20-52 44-52s40 18 44 52z" fill="#5a3a22"/><path d="M14 128c4-26 18-40 36-40" fill="none" stroke="#7a5230" stroke-width="5" stroke-linecap="round"/><rect x="47" y="40" width="6" height="48" fill="#8a8a96"/><rect x="36" y="52" width="28" height="6" fill="#8a8a96"/></svg>';
+  }
+
+  var st=null, timerId=null, until=0, busy=false, pick=-1;
+  function msg(h){ $('gmsg').innerHTML=h; }
+  function fmt(s){ s=Math.max(0,s); var h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(x<10?'0':'')+x; }
+  function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+  function tick(){
+    var left=Math.round((until-Date.now())/1000);
+    if(left<=0){ stopTimer(); $('gtimer').textContent=''; loadState(); return; }
+    $('gtimer').textContent=fmt(left);
+    var el=document.getElementById('gleft'); if(el) el.textContent=fmt(left);
+  }
+  function renderScene(){
+    var stg=$('gstage'); stg.innerHTML=''; stopTimer(); $('gtimer').textContent='';
+    if(st.wait>0){
+      for(var i=0;i<5;i++){ var d=document.createElement('div'); d.className='cf dead'; d.innerHTML=mound(); stg.appendChild(d); }
+      until=Date.now()+st.wait*1000; timerId=setInterval(tick,1000); tick();
+      msg('<b id="gleft">'+fmt(st.wait)+'</b>До следующей попытки. Награды приходят в бота.');
+      return;
+    }
+    for(var j=0;j<st.coffins;j++){
+      (function(k){
+        var b=document.createElement('button'); b.type='button'; b.className='cf'; b.dataset.i=k; b.innerHTML=coffin(st.skins[k]);
+        b.style.transform='rotate('+((k%2?1:-1)*(1+k%3))+'deg)';
+        b.addEventListener('click', function(){ if(busy) return; pick=k; haptic('medium'); $('gconf').hidden=false; });
+        stg.appendChild(b);
+      })(j);
+    }
+    msg('Выбери гроб, который хочешь раскопать.<br>Награда приходит в бота автоматически.');
+  }
+  function fail(text){
+    $('gstage').innerHTML=''; $('gtimer').textContent='';
+    msg('<b style="font-size:19px">Нет связи</b>'+text+'<br><button class="gplay" id="gretry" type="button">Повторить</button>');
+    var r=$('gretry'); if(r) r.onclick=loadState;
+  }
+  function loadState(){
+    if(!inTG){ fail('Открой игру внутри Telegram.'); return Promise.resolve(); }
+    return call('/api/dig/state').then(function(j){
+      if(j && j.ok){ st=j; renderScene(); } else fail('Игра временно недоступна. Попробуй позже.');
+    }).catch(function(){ fail('Игра временно недоступна. Попробуй позже.'); });
+  }
+
+  function dirt(el){
+    var r=el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height*.7;
+    for(var i=0;i<16;i++){
+      var d=document.createElement('i'); d.className='gdirt'; d.style.left=cx+'px'; d.style.top=cy+'px';
+      d.style.setProperty('--x',((Math.random()-.5)*190)+'px'); d.style.setProperty('--y',(-40-Math.random()*130)+'px');
+      d.style.animationDelay=(Math.random()*.9)+'s'; d.style.opacity='0';
+      d.style.animationFillMode='both';
+      document.body.appendChild(d); setTimeout(function(x){x.remove()}.bind(null,d),2000);
+    }
+    var s=document.createElement('div'); s.className='gshov'; s.style.left=(cx-10)+'px'; s.style.top=(r.top-40)+'px'; s.innerHTML='<svg viewBox="0 0 64 64" fill="none"><path d="M44 6 58 20l-6 6-14-14z" fill="#c9cdd8"/><path d="M38 24 18 44" stroke="#8a5a2e" stroke-width="5" stroke-linecap="round"/><path d="M14 40 28 54 12 58z" fill="#9aa0b0"/></svg>';
+    document.body.appendChild(s); setTimeout(function(){s.remove()},1700);
+  }
+  function confetti(){
+    var cols=['#ffe27a','#ffa928','#8b6cff','#5ee6ff','#ff7a59','#4be3a8'];
+    for(var i=0;i<46;i++){
+      var c=document.createElement('i'); c.className='gcf'; c.style.left=(Math.random()*100)+'vw'; c.style.background=cols[i%cols.length];
+      c.style.setProperty('--x',((Math.random()-.5)*160)+'px'); c.style.animationDelay=(Math.random()*.8)+'s'; c.style.opacity='1';
+      document.body.appendChild(c); setTimeout(function(x){x.remove()}.bind(null,c),3600);
+    }
+  }
+  function showReward(r){
+    var icon=r.jp?IC.coin:(r.k==='tok'?IC.tok:(r.k==='rub'?IC.rub:IC.day));
+    $('grewc').innerHTML='<div class="rays"></div><div class="ic">'+icon+'</div><h2>'+(r.jp?'ДЖЕКПОТ!':'Откопано!')+'</h2><h2 style="font-size:24px;color:#fff">'+r.label+'</h2><p>Награда уже пришла в бота</p><button class="gyes" id="gok" type="button">Отлично</button>';
+    $('grew').hidden=false; notify('success'); if(r.jp){ confetti(); haptic('heavy'); }
+    $('gok').onclick=function(){ $('grew').hidden=true; st={wait:r.wait}; renderScene(); };
+  }
+  function dig(){
+    var el=document.querySelector('.cf[data-i="'+pick+'"]'); if(!el) return;
+    busy=true; $('gconf').hidden=true;
+    document.querySelectorAll('.cf').forEach(function(x){ if(x!==el){ x.style.opacity='.35'; x.style.pointerEvents='none'; } });
+    el.style.transform=''; el.classList.add('dig'); dirt(el); haptic('rigid');
+    var t0=Date.now();
+    call('/api/dig/pick',{i:pick}).then(function(j){
+      var wait=Math.max(0,1700-(Date.now()-t0));
+      setTimeout(function(){
+        el.classList.remove('dig');
+        if(j && j.ok){ el.classList.add('open'); haptic('heavy'); setTimeout(function(){ showReward(j); busy=false; },850); }
+        else { busy=false; loadState(); }
+      },wait);
+    }).catch(function(){ busy=false; el.classList.remove('dig'); fail('Не получилось связаться с сервером. Попытка не потрачена, повтори позже.'); });
+  }
+  $('gyes').onclick=dig;
+  $('gno').onclick=function(){ $('gconf').hidden=true; haptic('light'); };
+  $('gplay').onclick=function(){
+    var g=$('game'); g.hidden=false; $('tabs').style.display='none';
+    var L=$('gload'); L.classList.remove('off'); L.querySelector('.bar2 i').style.animation='none'; void L.offsetWidth; L.querySelector('.bar2 i').style.animation='';
+    var img=new Image(); img.src='grobi-bg.jpg'; haptic('medium');
+    setTimeout(function(){ L.classList.add('off'); },1000);
+    loadState();
+  };
+  $('gx').onclick=function(){ if(busy) return; $('game').hidden=true; $('tabs').style.display=''; stopTimer(); $('gconf').hidden=true; $('grew').hidden=true; };
 })();
 </script>
 </body>
