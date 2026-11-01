@@ -356,7 +356,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
 .kc .gplay{margin-left:auto;padding:12px 22px;font-size:15px}
 .kc .gplay[disabled]{opacity:.45;filter:grayscale(.6);cursor:default}
 .kc .kt{font-family:"Unbounded",sans-serif;font-size:13px;color:#ffd36a;margin-left:auto;text-align:right}
-.kopen{position:absolute;inset:0;z-index:6;background:rgba(6,3,14,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.kopen{position:absolute;inset:0;z-index:6;background:#06030e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
 .kopen[hidden]{display:none}
 .kopen h2{margin:0;font-family:"Unbounded",sans-serif;font-size:22px;color:#fff}
 .kstage{width:200px;height:200px;position:relative}
@@ -378,6 +378,31 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
 .kit{flex:none;width:104px;height:122px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border-bottom:4px solid var(--rc,#8d93a8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;font-size:11.5px;font-weight:800;padding:6px}
 .kit svg{width:56px;height:56px}
 .r-g{--rc:#8d93a8}.r-b{--rc:#4b9bff}.r-p{--rc:#a24dff}.r-y{--rc:#ffc83a}
+
+.sheet.full{background:radial-gradient(100% 70% at 50% 0%,#1d3b5e,#07101c 72%);border:0;border-radius:0;box-shadow:none;max-width:none;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--sat) + 20px) 22px calc(var(--sab) + 24px);overflow:hidden}
+.sheet.pgo{transition:top .5s cubic-bezier(.3,.9,.2,1),left .5s cubic-bezier(.3,.9,.2,1),right .5s cubic-bezier(.3,.9,.2,1),bottom .5s cubic-bezier(.3,.9,.2,1),border-radius .5s,background .5s;transform:none}
+.sheet.pfade>*{opacity:0;transform:scale(.96);transition:opacity .28s,transform .28s}
+.pok{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.pring{width:132px;height:132px;margin-top:120px;transition:transform .55s cubic-bezier(.3,1.2,.3,1),margin .6s cubic-bezier(.3,1,.3,1)}
+.pring svg{width:100%;height:100%;overflow:visible}
+.pring .ck{fill:none;stroke:#6df2b8;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;transition:stroke-dashoffset .45s cubic-bezier(.4,0,.2,1)}
+.pring.draw .ck{stroke-dashoffset:0}
+.pring .rg{fill:none;stroke:url(#pg);stroke-width:8;stroke-linecap:round}
+.pring.squish{animation:psq .6s cubic-bezier(.3,1.3,.4,1)}
+@keyframes psq{0%{transform:scale(1)}28%{transform:scale(1.22,.8)}58%{transform:scale(.9,1.12)}100%{transform:scale(1)}}
+.pring.up{transform:translateY(-6px) scale(.8);margin:-8px 0 -2px}
+.pinfo{opacity:0;transform:translateY(18px);transition:opacity .5s .08s,transform .55s .08s cubic-bezier(.2,1,.3,1);width:100%}
+.pinfo.on{opacity:1;transform:none}
+.pinfo h3{font-family:"Unbounded","Manrope",sans-serif;font-size:24px;margin:0 0 6px}
+.pinfo .rid{display:inline-block;margin:6px 0 18px;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:700;color:var(--mute);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+.pinfo .rid b{color:var(--text);letter-spacing:.06em;font-family:ui-monospace,Menlo,monospace}
+.pinfo code{display:block;word-break:break-all;padding:16px;border-radius:20px;font-size:13px;line-height:1.45;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.14)}
+.pinfo .sm{margin:12px 0 0;color:var(--mute);font-size:13.5px;font-weight:600}
+.pbtns{display:flex;gap:12px;margin-top:22px;width:100%}
+.pbtns button{flex:1;border:0;cursor:pointer;padding:16px 10px;border-radius:999px;font:800 16px "Manrope",sans-serif;transition:transform .2s}
+.pbtns button:active{transform:scale(.95)}
+.pbtns .pc{color:var(--text);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28)}
+.pbtns .pk{color:#06101c;background:linear-gradient(135deg,#fff,var(--cyan))}
 </style>
 <script>
 (function(){
@@ -815,21 +840,63 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
   }
   function loading(t){ openSheet('<div class="center"><div class="spin"></div><h3>'+t+'</h3></div>'); }
   function fail(msg){ openSheet('<button class="x" type="button" aria-label="Закрыть">✕</button><div class="center"><h3>Не получилось</h3><p class="sub">'+esc(msg)+'</p></div><button class="btn2" id="again">Назад</button>'); document.getElementById('again').onclick=methods; }
-  function success(link, synced){
+  function success(link, synced, rid){
     haptic('heavy');
-    openSheet('<div class="center"><div class="big-ok"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#06101c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3>Оплачено</h3>'+
-      '<p class="sub">'+(link?'Ссылка подписки готова. Вставьте её в приложение Happ или v2rayNG.':'Доступ выдаётся, ссылка придёт в бот сообщением.')+'</p></div>'+
-      (link?'<div class="linkbox"><code>'+esc(link)+'</code><button class="copy" id="sCopy" type="button">Копировать</button></div>':'')+
-      '<button class="btn2" id="done">Готово</button>');
-    var c=document.getElementById('sCopy'); if(c) c.onclick=function(){ copyText(link,c); };
-    document.getElementById('done').onclick=function(){ closeSheet(); call('/api/init').then(function(j){ if(j&&j.ok){api.snap=j; api.prices=j.prices; renderMine(j); render();} }).catch(function(){}); };
+    var wasOpen=sheet.classList.contains('on'), R=2*Math.PI*44;
+    var rcp=rid?('#'+String(rid).toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(-12)):'';
+    function content(){
+      return '<div class="pok"><div class="pring" id="pring"><svg viewBox="0 0 100 100"><defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6df2b8"/><stop offset="1" stop-color="#5ee6ff"/></linearGradient></defs>'+
+        '<circle class="rg" id="prg" cx="50" cy="50" r="44" stroke-dasharray="0 '+R+'"/><path class="ck" id="pck" d="M29 52l15 15 28-31" pathLength="60"/></svg></div>'+
+        '<div class="pinfo" id="pinfo"><h3>Оплата прошла</h3>'+(rcp?'<div class="rid">ID чека <b>'+esc(rcp)+'</b></div>':'')+
+        (link?'<code>'+esc(link)+'</code><p class="sm">Вставьте ссылку в Happ или v2rayNG</p>':'<p class="sm">Доступ выдаётся, ссылка придёт в бот сообщением.</p>')+
+        '<div class="pbtns">'+(link?'<button class="pc" id="pcopy" type="button">Скопировать</button>':'')+'<button class="pk" id="pdone" type="button">Хорошо</button></div></div></div>';
+    }
+    function finish(){ var j=document.getElementById('pdone'); if(!j) return;
+      var c=document.getElementById('pcopy'); if(c) c.onclick=function(){ copyText(link,c); };
+      j.onclick=function(){ sheet.classList.remove('on'); scrim.classList.remove('on'); setTimeout(function(){ sheet.classList.remove('full','pgo','pfade'); sheet.removeAttribute('style'); },520);
+        call('/api/init').then(function(r){ if(r&&r.ok){api.snap=r; api.prices=r.prices; renderMine(r); render();} }).catch(function(){}); };
+    }
+    function run(){
+      var ring=document.getElementById('pring'), rg=document.getElementById('prg'), info=document.getElementById('pinfo');
+      var t0=performance.now(), SNAKE=900, CLOSE=480, dead=false;
+      function step(now){
+        if(dead||!document.getElementById('prg')) return;
+        var e=now-t0, ang=(e*0.55)%360, len;
+        if(e<SNAKE){ len=R*(0.18+0.12*Math.sin(e/160)); }
+        else { var k=Math.min(1,(e-SNAKE)/CLOSE); k=1-Math.pow(1-k,3); len=R*(0.18+0.82*k); ang=ang*(1-k); }
+        rg.setAttribute('stroke-dasharray',len+' '+(R-len+1)); rg.setAttribute('transform','rotate('+(ang-90)+' 50 50)');
+        if(e<SNAKE+CLOSE) requestAnimationFrame(step);
+        else {
+          dead=true; haptic('light');
+          rg.style.transition='opacity .25s'; rg.style.opacity='0';
+          ring.classList.add('draw');
+          setTimeout(function(){ ring.classList.add('squish'); haptic('medium'); },430);
+          setTimeout(function(){ ring.classList.add('up'); info.classList.add('on'); try{ tg.HapticFeedback.notificationOccurred('success'); }catch(_){} },1020);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+    function build(){ sheet.innerHTML=content(); finish(); run(); }
+    if(!wasOpen){ sheet.classList.add('on'); scrim.classList.add('on'); }
+    if(!wasOpen){ sheet.classList.add('full'); build(); return; }
+    // кнопки плавно исчезают → шторка разворачивается на весь экран → змейка → галочка
+    sheet.classList.add('pfade');
+    setTimeout(function(){
+      var r=sheet.getBoundingClientRect(), s=sheet.style;
+      s.position='fixed'; s.margin='0'; s.maxWidth='none'; s.left=r.left+'px'; s.right=(innerWidth-r.right)+'px'; s.top=r.top+'px'; s.bottom=(innerHeight-r.bottom)+'px';
+      void sheet.offsetWidth;
+      sheet.classList.add('pgo','full'); sheet.classList.remove('pfade');
+      sheet.innerHTML='';
+      s.left='0'; s.right='0'; s.top='0'; s.bottom='0';
+      build();
+    },260);
   }
   var ERR={nofunds:'На балансе не хватает денег.',invoice:'Не удалось создать счёт. Попробуйте другой способ.',rate:'Слишком много запросов, подождите минуту.',auth:'Сессия устарела. Закройте приложение и откройте из бота заново.',banned:'Доступ ограничен. Напишите в поддержку.',bad_choice:'Неверный выбор.'};
   function startPay(m){
     var p=cur(); loading('Готовлю оплату…');
     call('/api/pay',{tariff:p.key,devices:p.fixed||state.dev,provider:m}).then(function(j){
       if(!j.ok) return fail(ERR[j.error]||'Ошибка '+(j._status||'')+', попробуйте позже.');
-      if(j.paid) return success(j.link, j.synced);
+      if(j.paid) return success(j.link, j.synced, j.receipt);
       waiting(j);
     }).catch(function(){ fail('Нет связи с сервером оплаты. Откройте приложение из бота и попробуйте снова.'); });
   }
@@ -852,7 +919,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
       if(Date.now()-t0>ttl){ clearInterval(poll); poll=null; return fail('Счёт истёк. Создайте новый.'); }
       call('/api/status',{order_id:j.order_id}).then(function(r){
         if(!r||!r.ok) return;
-        if(r.status==='paid'){ clearInterval(poll); poll=null; if(r.snap){api.snap=r.snap; api.prices=r.snap.prices; renderMine(r.snap); render();} success(r.link, r.synced); }
+        if(r.status==='paid'){ clearInterval(poll); poll=null; if(r.snap){api.snap=r.snap; api.prices=r.snap.prices; renderMine(r.snap); render();} success(r.link, r.synced, r.receipt); }
         else if(r.status==='expired'){ clearInterval(poll); poll=null; fail('Счёт истёк. Создайте новый.'); }
       }).catch(function(){});
     },3000);
