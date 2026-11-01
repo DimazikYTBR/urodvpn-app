@@ -338,6 +338,46 @@ body.ing #v-menu{display:none}
 .cstart .ics{display:flex;gap:18px;align-items:center}
 .cstart .ics svg{width:44px;height:44px}
 .cstart .timer{font-family:"Unbounded",sans-serif;font-size:26px;color:#ffd36a}
+
+.gban.kb{margin-top:16px;aspect-ratio:16/9;background:radial-gradient(90% 120% at 80% 0%,#6a2bd6,#1a0a35 70%);box-shadow:0 18px 44px -14px rgba(0,0,0,.7),0 0 36px -10px rgba(170,90,255,.55)}
+.gban.kb::after{background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(8,4,24,.85) 100%)}
+html.hw .gban.kb{background:radial-gradient(90% 120% at 80% 0%,#c4520f,#1a0a35 70%)}
+.kb .kbox{position:absolute;left:50%;top:10%;width:36%;transform:translateX(-50%);animation:kfloat 3s ease-in-out infinite;filter:drop-shadow(0 12px 22px rgba(0,0,0,.6))}
+.kb .kbox svg{width:100%;display:block}
+@keyframes kfloat{50%{transform:translateX(-50%) translateY(-8px) rotate(2deg)}}
+.kgame{background:radial-gradient(100% 70% at 50% 0%,#3a1673,#0a0514 70%)}
+html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%)}
+.khead{display:flex;align-items:center;gap:14px;padding:calc(var(--sat) + 14px) 16px 0}
+.khead h2{margin:0;font-family:"Unbounded",sans-serif;font-size:20px}
+.kcases{display:grid;gap:14px;padding:22px 16px}
+.kc{display:flex;align-items:center;gap:14px;padding:14px;border-radius:24px;background:rgba(255,255,255,.07);border:1px solid var(--glass-b)}
+.kc svg{width:74px;height:74px;flex:none}
+.kc b{display:block;font-size:17px}.kc span{font-size:12.5px;color:var(--mute)}
+.kc .gplay{margin-left:auto;padding:12px 22px;font-size:15px}
+.kc .gplay[disabled]{opacity:.45;filter:grayscale(.6);cursor:default}
+.kc .kt{font-family:"Unbounded",sans-serif;font-size:13px;color:#ffd36a;margin-left:auto;text-align:right}
+.kopen{position:absolute;inset:0;z-index:6;background:rgba(6,3,14,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.kopen[hidden]{display:none}
+.kopen h2{margin:0;font-family:"Unbounded",sans-serif;font-size:22px;color:#fff}
+.kstage{width:200px;height:200px;position:relative}
+.kstage svg{width:100%;height:100%;overflow:visible;animation:kshake .5s linear infinite}
+.kstage.lid .klid{animation:klid .9s ease-out forwards}
+.kstage.lid svg{animation:none}
+.kstage::after{content:"";position:absolute;left:50%;top:40%;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 60px 40px rgba(255,210,100,.8);opacity:0;transform:translate(-50%,-50%)}
+.kstage.lid::after{animation:kglow .9s ease-out forwards}
+@keyframes kshake{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+@keyframes klid{to{transform:translate(18px,-70px) rotate(24deg);opacity:0}}
+@keyframes kglow{to{opacity:1;transform:translate(-50%,-50%) scale(3)}}
+.kview{position:relative;width:100%;height:150px;overflow:hidden;display:none;background:rgba(255,255,255,.05);border-top:1px solid var(--glass-b);border-bottom:1px solid var(--glass-b)}
+.kview.on{display:block}
+.kview::before,.kview::after{content:"";position:absolute;top:0;bottom:0;width:22%;z-index:2;pointer-events:none}
+.kview::before{left:0;background:linear-gradient(90deg,#06030e,transparent)}.kview::after{right:0;background:linear-gradient(-90deg,#06030e,transparent)}
+.kmark{position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;z-index:3;background:#ffe27a;box-shadow:0 0 14px 2px rgba(255,200,80,.9)}
+.kmark::before{content:"";position:absolute;top:-1px;left:-7px;border:8px solid transparent;border-top-color:#ffe27a}
+.kstrip{position:absolute;left:0;top:14px;display:flex;gap:8px;will-change:transform}
+.kit{flex:none;width:104px;height:122px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border-bottom:4px solid var(--rc,#8d93a8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;font-size:11.5px;font-weight:800;padding:6px}
+.kit svg{width:56px;height:56px}
+.r-g{--rc:#8d93a8}.r-b{--rc:#4b9bff}.r-p{--rc:#a24dff}.r-y{--rc:#ffc83a}
 </style>
 <script>
 (function(){
@@ -418,6 +458,10 @@ body.ing #v-menu{display:none}
     <div class="cfall" id="cfall"></div>
     <div class="gbot"><div><b>Лови Токены</b><span>Награда за ловкость · раз в 4 часа</span></div><button class="gplay" id="cplay" type="button">Играть</button></div>
   </section>
+  <section class="gban kb" id="gcase">
+    <div class="kbox" id="kbox"></div>
+    <div class="gbot"><div><b>Кейсы</b><span id="kbsub">Бесплатно раз в день · токены и попытки</span></div><button class="gplay" id="kplay" type="button">Открыть</button></div>
+  </section>
 </main>
 
 <nav class="glass tabs" id="tabs" aria-label="Разделы">
@@ -425,6 +469,16 @@ body.ing #v-menu{display:none}
   <button class="tab" type="button" data-t="games"><svg viewBox="0 0 24 24"><path d="M15.5 3.5 20.5 8.5l-2.2 2.2-5-5z"/><path d="M13.3 8.7 6.2 15.8"/><path d="M4.5 14.3 9.7 19.5 5.6 20.4 3.6 18.4z"/></svg><span>Игры</span></button>
 </nav>
 
+<div class="game kgame" id="kgame" hidden>
+  <div class="khead"><button class="gx" id="kx" type="button" aria-label="Закрыть">✕</button><h2>Кейсы</h2></div>
+  <div class="kcases" id="kcases"></div>
+  <div class="kopen" id="kopen" hidden>
+    <h2 id="kname"></h2>
+    <div class="kstage" id="kstage"></div>
+    <div class="kview" id="kview"><div class="kmark"></div><div class="kstrip" id="kstrip"></div></div>
+  </div>
+  <div class="gmod" id="krew" hidden><div class="gcard grw" id="krewc"></div></div>
+</div>
 <div class="game cgame" id="cgame" hidden>
   <div class="chud"><button class="gx" id="cx" type="button" aria-label="Закрыть">✕</button><b id="cscore">0</b><span class="gtimer" id="ctime">30</span></div>
   <div class="cbar"><i id="cprog"></i></div>
@@ -847,12 +901,29 @@ body.ing #v-menu{display:none}
   }
 
   var st=null, timerId=null, until=0, busy=false, pick=-1;
+  var syncN=0;
+  function resync(){
+    if(!inTG||$('game').hidden||!st||!(st.wait>0)) return;
+    call('/api/dig/state').then(function(j){
+      if(!j||!j.ok) return;
+      if(j.wait>0){ until=Date.now()+j.wait*1000; tick(); } else loadState();
+    }).catch(function(){});
+  }
+  function csync(){
+    if(!inTG||$('cgame').hidden||!cwaitTimer) return;
+    call('/api/catch/state').then(function(j){
+      if(j&&j.ok&&j.wait>0) cuntil=Date.now()+j.wait*1000;
+      else if(j&&j.ok) copen();
+    }).catch(function(){});
+  }
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ resync(); csync(); } });
   function msg(h){ $('gmsg').innerHTML=h; }
   function fmt(s){ s=Math.max(0,s); var h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(x<10?'0':'')+x; }
   function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
   function tick(){
     var left=Math.round((until-Date.now())/1000);
     if(left<=0){ stopTimer(); $('gtimer').textContent=''; loadState(); return; }
+    if(++syncN%30===0) resync();
     $('gtimer').textContent=fmt(left);
     var el=document.getElementById('gleft'); if(el) el.textContent=fmt(left);
   }
@@ -954,7 +1025,7 @@ body.ing #v-menu{display:none}
     if(cwaitTimer){ clearInterval(cwaitTimer); cwaitTimer=null; }
     if(wait>0){
       go.style.display='none'; cuntil=Date.now()+wait*1000;
-      var t=function(){ var l=Math.round((cuntil-Date.now())/1000); if(l<=0){ clearInterval(cwaitTimer); cwaitTimer=null; copen(); return; } w.textContent='Следующая игра через '+cfmt(l); };
+      var sn=0; var t=function(){ var l=Math.round((cuntil-Date.now())/1000); if(l<=0){ clearInterval(cwaitTimer); cwaitTimer=null; copen(); return; } if(++sn%30===0) csync(); w.textContent='Следующая игра через '+cfmt(l); };
       t(); cwaitTimer=setInterval(t,1000);
     } else { go.style.display=''; w.textContent=''; }
   }
@@ -1033,6 +1104,86 @@ body.ing #v-menu{display:none}
       } else { $('cres').textContent='Не удалось засчитать игру.'; done(); }
     }).catch(function(){ $('cres').textContent='Нет связи с сервером, награда не засчитана.'; done(); });
   }
+
+  /* ===== КЕЙСЫ ===== */
+  function boxSvg(hw){
+    var a=hw?'#ff9a2e':'#a24dff', b=hw?'#7a2c05':'#3a1673', c=hw?'#ffd39a':'#d9b8ff';
+    if(hw) return '<svg viewBox="0 0 120 140"><g class="kbody"><path d="M36 44h48l22 22-18 66H32L14 66z" fill="'+b+'" stroke="'+a+'" stroke-width="4" stroke-linejoin="round"/><path d="M60 62v52M44 80h32" stroke="'+c+'" stroke-width="6" stroke-linecap="round"/></g><g class="klid"><path d="M36 44h48l22 22H14z" fill="'+a+'" stroke="'+c+'" stroke-width="3" stroke-linejoin="round"/></g></svg>';
+    return '<svg viewBox="0 0 120 120"><g class="kbody"><rect x="14" y="48" width="92" height="64" rx="10" fill="'+b+'" stroke="'+a+'" stroke-width="4"/><rect x="52" y="48" width="16" height="64" fill="'+a+'"/><circle cx="60" cy="80" r="8" fill="'+c+'"/></g><g class="klid"><rect x="8" y="26" width="104" height="26" rx="8" fill="'+a+'" stroke="'+c+'" stroke-width="3"/><rect x="52" y="26" width="16" height="26" fill="'+c+'" fill-opacity=".7"/></g></svg>';
+  }
+  var ICGD='<svg viewBox="0 0 64 64"><path d="M20 8h24l10 14-10 34H20L10 22z" fill="#5a3620" stroke="#d9b27a" stroke-width="3" stroke-linejoin="round"/><path d="M32 18v26M24 28h16" stroke="#d9b27a" stroke-width="4" stroke-linecap="round"/></svg>';
+  var ICCT='<svg viewBox="0 0 64 64"><path d="M8 24h48l-6 28a6 6 0 0 1-6 5H20a6 6 0 0 1-6-5z" fill="#4b3bd6" stroke="#b9a4ff" stroke-width="3" stroke-linejoin="round"/><path d="M18 24c0-12 6-18 14-18s14 6 14 18" fill="none" stroke="#b9a4ff" stroke-width="3"/></svg>';
+  function pIcon(k){ return k==='tok'?IC.tok:(k==='day'?IC.day:(k==='gd'?ICGD:ICCT)); }
+  var POOL={
+    urod:[['tok',1,'r-g'],['tok',2,'r-g'],['tok',3,'r-b'],['tok',5,'r-p'],['tok',10,'r-y'],['gd',1,'r-b'],['ct',1,'r-b']],
+    grob:[['tok',3,'r-g'],['tok',5,'r-b'],['tok',8,'r-p'],['tok',15,'r-y'],['day',1,'r-y'],['gd',1,'r-b'],['ct',1,'r-b']]
+  };
+  var WGT={'r-g':5,'r-b':3,'r-p':1.6,'r-y':.7};
+  function pLabel(k,v){ return k==='tok'?'+'+v+' '+(v===1?'токен':(v<5?'токена':'токенов')):(k==='day'?'+'+v+' день VPN':(k==='gd'?'Попытка · Гробы':'Попытка · Токены')); }
+  function pRand(cid){ var p=POOL[cid], t=0, i; p.forEach(function(x){ t+=WGT[x[2]]; }); var r=Math.random()*t; for(i=0;i<p.length;i++){ r-=WGT[p[i][2]]; if(r<=0) return p[i]; } return p[0]; }
+  function tile(x){ return '<div class="kit '+x[2]+'">'+pIcon(x[0])+'<span>'+pLabel(x[0],x[1])+'</span></div>'; }
+
+  var kEnd=0, kTimer=null, kBusy=false, kSt=null, HW=document.documentElement.classList.contains('hw');
+  var kb=$('kbox'); if(kb) kb.innerHTML=boxSvg(HW);
+  function kRender(){
+    var cs=$('kcases'); if(!kSt){ cs.innerHTML='<p style="padding:20px;color:var(--mute)">Загрузка…</p>'; return; }
+    cs.innerHTML='';
+    kSt.cases.forEach(function(c){
+      var d=document.createElement('div'); d.className='kc';
+      var hwc=(c.id==='grob');
+      d.innerHTML=boxSvg(hwc)+'<div><b>'+c.name+'</b><span>'+(hwc?'Хэллоуин · раз в день':'Бесплатно · раз в день')+'</span></div>'+(c.open?'<button class="gplay" type="button">Открыть</button>':'<div class="kt" data-t>…</div>');
+      var bt=d.querySelector('button'); if(bt) bt.onclick=function(){ kOpen(c); };
+      cs.appendChild(d);
+    });
+    kTick();
+  }
+  function kTick(){ var w=Math.max(0,Math.round((kEnd-Date.now())/1000)); document.querySelectorAll('#kcases [data-t]').forEach(function(e){ e.textContent='через '+fmt(w); }); if(w<=0&&kSt&&kSt.cases.some(function(c){return !c.open})&&!kBusy) kLoad(); }
+  function kLoad(){
+    if(!inTG){ kSt={cases:[{id:'urod',name:'Урод Кейс',open:true}],wait:0}; kEnd=Date.now(); kRender(); return; }
+    call('/api/case/state').then(function(j){ if(j&&j.ok){ kSt=j; kEnd=Date.now()+j.wait*1000; kRender(); } else { $('kcases').innerHTML='<p style="padding:20px;color:var(--mute)">Не удалось загрузить кейсы.</p>'; } })
+      .catch(function(){ $('kcases').innerHTML='<p style="padding:20px;color:var(--mute)">Нет связи с сервером.</p>'; });
+  }
+  function kOpen(c){
+    if(kBusy) return; kBusy=true; haptic('medium');
+    $('kname').textContent=c.name; $('kview').classList.remove('on'); $('kview').style.display='';
+    var st=$('kstage'); st.className='kstage'; st.style.display=''; st.innerHTML=boxSvg(c.id==='grob'); $('kopen').hidden=false;
+    var t0=Date.now();
+    call('/api/case/open',{id:c.id}).then(function(j){
+      if(!(j&&j.ok)){ throw 0; }
+      setTimeout(function(){ kSpin(c,j); },Math.max(0,1400-(Date.now()-t0)));
+    }).catch(function(){ kBusy=false; $('kopen').hidden=true; kLoad(); });
+  }
+  function kSpin(c,j){
+    var st=$('kstage'); st.classList.add('lid'); haptic('heavy');
+    setTimeout(function(){
+      st.style.display='none';
+      var vw=$('kview'), strip=$('kstrip'); vw.classList.add('on');
+      var N=52, WIN=44, items=[], i, win=null;
+      (POOL[c.id]).forEach(function(x){ if(x[0]===j.kind&&x[1]===j.val) win=x; });
+      if(!win) win=[j.kind,j.val,'r-b'];
+      for(i=0;i<N;i++) items.push(i===WIN?win:pRand(c.id));
+      strip.innerHTML=items.map(tile).join('');
+      strip.style.transition='none'; strip.style.transform='translateX(0)'; void strip.offsetWidth;
+      var W=vw.clientWidth, stride=112, jit=(Math.random()-.5)*70;
+      var tx=-(WIN*stride+52+jit)+W/2, dur=6.2;
+      strip.style.transition='transform '+dur+'s cubic-bezier(.08,.62,.06,1)';
+      strip.style.transform='translateX('+tx+'px)';
+      var last=-1, tk=setInterval(function(){
+        var m=new DOMMatrix(getComputedStyle(strip).transform), idx=Math.floor((W/2-m.m41)/stride);
+        if(idx!==last){ last=idx; haptic('light'); }
+      },40);
+      setTimeout(function(){ clearInterval(tk); kShow(c,j); },dur*1000+500);
+    },950);
+  }
+  function kShow(c,j){
+    var rc=$('krewc'); notify('success');
+    var big=(j.kind==='day'||(j.kind==='tok'&&j.val>=10));
+    rc.innerHTML='<div class="rays"></div><div class="ic">'+pIcon(j.kind)+'</div><h2 style="font-size:24px">'+j.label+'</h2><p>'+(j.kind==='gd'?'Играй в «Копай Гробы» прямо сейчас — кулдаун сброшен':(j.kind==='ct'?'Играй в «Лови Токены» прямо сейчас — кулдаун сброшен':'Награда уже пришла в бота'))+(j.conv?'<br><small>Игра уже была доступна, поэтому вместо попытки токены</small>':'')+'</p><button class="gyes" id="kok" type="button">Отлично</button>';
+    $('krew').hidden=false; if(big||j.kind==='tok'&&j.val>=5){ confetti(); haptic('heavy'); }
+    $('kok').onclick=function(){ $('krew').hidden=true; $('kopen').hidden=true; kBusy=false; kLoad(); };
+  }
+  $('kplay').onclick=function(){ $('kgame').hidden=false; $('tabs').style.display='none'; haptic('medium'); kSt=null; kRender(); kLoad(); if(!kTimer) kTimer=setInterval(kTick,1000); };
+  $('kx').onclick=function(){ if(kBusy) return; $('kgame').hidden=true; $('tabs').style.display=''; };
 
 })();
 </script>
