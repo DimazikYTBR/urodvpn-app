@@ -226,6 +226,14 @@ html.hw .hwf{display:block}
 @keyframes hwfall{to{transform:translateY(112vh) rotate(40deg)}}
 .hwtag{display:none;margin:0 0 14px;padding:10px 14px;border-radius:18px;font-size:13px;font-weight:800;text-align:center;color:#ffd9a8;background:linear-gradient(135deg,rgba(255,110,20,.28),rgba(140,50,255,.28));border:1px solid rgba(255,160,70,.4)}
 html.hw .hwtag{display:block}
+html.ny{--ink:#06142a;--ink2:#0a1f3d;--cyan:#8fe3ff;--violet:#5b8cff;--coral:#ff5470;--mint:#6df0b4;--glass-b:rgba(170,225,255,.34)}
+html.ny .bg{background:radial-gradient(120% 80% at 50% 0%,#12315e 0%,var(--ink) 62%)}
+html.ny .b1{background:#2f6bff}html.ny .b2{background:#7fe0ff;opacity:.5}html.ny .b3{background:#ff3d5a;opacity:.4}
+html.ny .hwf,html.hw .hwf{display:block}
+html.ny .hwtag{display:block;color:#e6f6ff;background:linear-gradient(135deg,rgba(255,84,112,.3),rgba(70,140,255,.3));border-color:rgba(170,225,255,.45)}
+.nyw{position:relative;display:inline-block;line-height:0}
+.nyh{position:absolute;left:50%;top:-.7em;left:55%;transform:translateX(-50%) rotate(14deg);font-style:normal;font-size:1.1em;line-height:1;pointer-events:none}
+.hdr .nyw{font-size:14px}.hero .nyw{font-size:30px}
 .wrap{padding-bottom:calc(230px + var(--sab))}
 .bar{bottom:calc(86px + var(--sab))}
 body.ing .bar{display:none}
@@ -406,15 +414,24 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
 </style>
 <script>
 (function(){
-  var n=Date.now(), a=Date.UTC(2026,9,30,21,0,0), b=Date.UTC(2026,10,6,21,0,0);
-  if(!(n>=a&&n<b)) return;
-  document.documentElement.classList.add('hw');
-  var m=document.querySelector('meta[name=theme-color]'); if(m) m.content='#0b0612';
+  // Сезонные темы включаются сами по дате (МСК): Новый год 1 дек – 10 янв, Хэллоуин 20 окт – 6 ноя
+  var d=new Date(Date.now()+3*3600*1000), md=(d.getUTCMonth()+1)*100+d.getUTCDate(), q=location.search.match(/season=(\w+)/);
+  var s=q?q[1]:(md>=1201||md<=110?'ny':(md>=1020&&md<=1106?'hw':''));
+  if(!s) return;
+  var C={ny:{cls:'ny',bg:'#06142a',em:['❄️','❄️','✨','⭐','❄️','🎄'],tag:'🎄 С наступающим Новым годом! Пусть интернет летит быстрее оленей ❄️',logo:null},
+         hw:{cls:'hw',bg:'#0b0612',em:['🎃','🦇','👻','🕸️','🎃','🦇'],tag:'🎃 Страшно быстрый VPN 🦇',logo:'logo-hw.jpg'}}[s];
+  if(!C) return;
+  document.documentElement.classList.add(C.cls);
+  var m=document.querySelector('meta[name=theme-color]'); if(m) m.content=C.bg;
   document.addEventListener('DOMContentLoaded',function(){
-    document.querySelectorAll('img[src="logo.jpg"]').forEach(function(im){ im.src='logo-hw.jpg'; });
-    var f=document.getElementById('hwf'), e=['🎃','🦇','👻','🕸️','🎃','🦇'];
-    for(var i=0;i<14;i++){ var x=document.createElement('i'); x.textContent=e[i%e.length]; x.style.left=(Math.random()*94)+'%'; x.style.fontSize=(18+Math.random()*20)+'px'; x.style.animationDuration=(14+Math.random()*16)+'s'; x.style.animationDelay=(-Math.random()*24)+'s'; f.appendChild(x); }
-    var t=window.Telegram&&Telegram.WebApp; if(t){ try{ t.setHeaderColor('#0b0612'); t.setBackgroundColor('#0b0612'); }catch(_){} }
+    if(C.logo) document.querySelectorAll('img[src="logo.jpg"]').forEach(function(im){ im.src=C.logo; });
+    else document.querySelectorAll('img[src="logo.jpg"]').forEach(function(im){
+      var w=document.createElement('span'); w.className='nyw'; im.parentNode.insertBefore(w,im); w.appendChild(im);
+      var h=document.createElement('i'); h.className='nyh'; h.textContent='🎅'; w.appendChild(h); });
+    var tg=document.querySelector('.hwtag'); if(tg) tg.textContent=C.tag;
+    var f=document.getElementById('hwf'), e=C.em;
+    for(var i=0;i<14;i++){ var x=document.createElement('i'); x.textContent=e[i%e.length]; x.style.left=(Math.random()*94)+'%'; x.style.fontSize=(18+Math.random()*20)+'px'; x.style.animationDuration=(14+Math.random()*16)+'s'; x.style.animationDelay=(-Math.random()*20)+'s'; f.appendChild(x); }
+    var t=window.Telegram&&Telegram.WebApp; if(t){ try{ t.setHeaderColor(C.bg); t.setBackgroundColor(C.bg); }catch(_){} }
   });
 })();
 </script>
@@ -428,7 +445,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
 </header>
 
 <main class="wrap" id="v-menu">
-  <div class="hwtag">🎃 Хэллоуин в УродVPN · скидка −15% до 6 ноября 🦇</div>
+  <div class="hwtag"></div>
   <div class="top in">
     <div class="hello">Привет,<b id="name">друг</b></div>
     <a class="glass chip" id="chan" href="https://t.me/MyUrodVPN" style="color:inherit;text-decoration:none">Канал</a>
@@ -463,7 +480,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
     <li class="glass"><span class="n">2</span><div><b>Оплачиваешь в боте</b><span>СБП, USDT или с баланса. Промокод и скидка уровня применятся там же.</span></div></li>
     <li class="glass"><span class="n">3</span><div><b>Получаешь ссылку</b><span>Вставляешь её в приложение, и всё работает.</span></div></li>
   </ol>
-  <p class="note">Окончательную цену и способы оплаты покажет бот: с учётом промокода и твоего уровня.</p>
+  <p class="note">Окончательную цену и способы оплаты покажет бот: с учётом твоего уровня.</p>
 </main>
 
 <div class="glass bar in" id="bar">
@@ -572,8 +589,8 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
   function haptic(t){ try{ tg.HapticFeedback.impactOccurred(t); }catch(e){} }
 
   var LVL_DEF = [
-    {n:'Новичок',   c:'#98a2b8'}, {n:'Уголь', c:'#b4b8c4'}, {n:'Бронза', c:'#e0985a'},
-    {n:'Серебро',   c:'#d3dcec'}, {n:'Золото', c:'#fbcd46'}, {n:'Алмаз',  c:'#7dd7ff'}, {n:'Бриллиант', c:'#d0d3e2'}
+    {n:'Новичок',   c:'#98a2b8'}, {n:'Бронза', c:'#e0985a'},
+    {n:'Серебро',   c:'#d3dcec'}, {n:'Золото', c:'#fbcd46'}, {n:'Алмаз',  c:'#7dd7ff'}
   ];
   function lvIcon(i){
     var c = LVL_DEF[i].c, hex='<polygon points="50,4 91,27 91,73 50,96 9,73 9,27" fill="'+c+'"/><polygon points="50,10 86,30 86,70 50,90 14,70 14,30" fill="#0b0f1d" fill-opacity=".78"/>', ic='';
@@ -612,7 +629,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
     requestAnimationFrame(function(){ setTimeout(function(){ var b=document.getElementById('lBar'); if(b) b.style.width=Math.round(frac*100)+'%'; },300); });
     if(prev!==undefined && prev!==String(i)) haptic('medium');
   }
-  var LVL_THR=[0,150,500,1000,2000,4000,10000];
+  var LVL_THR=[0,500,1500,4000,10000];
   function lvPct(){ var s=(api.snap&&api.snap.lv)?api.snap:(typeof snap!=='undefined'?snap:null); return (s&&s.lv&&s.lv.p)||0; }
   function lvDisc(v){ var p=lvPct(); return p? Math.max(Math.floor(v*(100-p)/100+0.5),10) : v; }
 
@@ -831,7 +848,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
       '<button class="opt" data-m="rollypay"><div><b>Рублями (СБП)</b><span>Комиссия '+fpct('rollypay')+'%, итого '+withFee(price,'rollypay')+' ₽</span></div><i class="dot"></i></button>'+
       '<button class="opt" data-m="xrocket"><div><b>USDT через xRocket</b><span>Комиссия '+fpct('xrocket')+'%, итого '+withFee(price,'xrocket')+' ₽</span></div><i class="dot"></i></button>'+
       '<button class="btn2" id="confirm" type="button">Подтвердить заказ</button>'+
-      '<p class="tiny" style="margin-top:14px">Цена с учётом скидки уровня и промокода. С баланса комиссии нет, платёжные системы берут свою комиссию сверху.</p>');
+      '<p class="tiny" style="margin-top:14px">Цена с учётом скидки уровня. С баланса комиссии нет, платёжные системы берут свою комиссию сверху.</p>');
     var opts=[].slice.call(sheet.querySelectorAll('.opt'));
     function mark(){ opts.forEach(function(b){ b.classList.toggle('sel', b.dataset.m===chosen); }); }
     mark();
