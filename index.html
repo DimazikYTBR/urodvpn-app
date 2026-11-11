@@ -460,7 +460,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
     <img class="orb" src="logo.jpg" alt="Логотип УродVPN" width="92" height="92">
     <h1>УродVPN</h1>
     <p class="lead">Твой ускоритель инета. Выбери тариф и оплати за минуту.</p>
-    <div class="price-hint"><span class="pill">от 79 ₽</span><span class="pill">СБП и USDT</span><span class="pill">до 10 устройств</span></div>
+    <div class="price-hint"><span class="pill">от 49 ₽</span><span class="pill">СБП и USDT</span><span class="pill">до 10 устройств</span></div>
   </section>
 
   <section class="glass mine in" id="mine" aria-live="polite">
@@ -566,6 +566,8 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
   if (u && u.first_name) document.getElementById('name').textContent = u.first_name;
 
   var PLANS = [
+    {key:'try70',  name:'Дай попробовать · 70 ГБ', price:49, days:15, desc:'70 ГБ трафика на 15 дней', color:'#7dffb2'},
+    {key:'try',    name:'Дай попробовать · безлимит', price:59, days:15, desc:'Без ограничения трафика, 15 дней', color:'#ffd35e'},
     {key:'gb100',  name:'100 ГБ',   price:79,  desc:'100 ГБ трафика на 30 дней',                color:'#5ee6ff'},
     {key:'unlim',  name:'Безлимит', price:109, desc:'Без ограничения трафика, 30 дней',          color:'#8b6cff'},
     {key:'family', name:'Я и моя семья', price:169, desc:'Безлимит на 10 устройств, 30 дней', color:'#ff7a59', fixed:10}
@@ -581,7 +583,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
     b.className = 'glass plan in'; b.type='button'; b.dataset.key = p.key;
     b.style.setProperty('--c', p.color);
     b.innerHTML = '<span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#06101c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>'+
-      '<div class="row"><span class="name">'+p.name+'</span><span class="cost">'+p.price+' ₽<small>/ 30 дн.</small></span></div>'+
+      '<div class="row"><span class="name">'+p.name+'</span><span class="cost">'+p.price+' ₽<small>/ '+(p.days||30)+' дн.</small></span></div>'+
       '<p class="desc">'+p.desc+'</p>';
     b.addEventListener('click', function(){ state.plan = p.key; haptic('light'); render(); });
     plansEl.appendChild(b);
@@ -838,7 +840,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
     var base=p.fixed?p.price:p.price+Math.max(0,d-INCLUDED)*DEVICE_PRICE, lvp=lvPct(), rows=[];
     rows.push('<div class="orow"><span>Тариф</span><b>'+esc(p.name)+'</b></div>');
     rows.push('<div class="orow"><span>Устройства</span><b>'+d+'</b></div>');
-    rows.push('<div class="orow"><span>Срок</span><b>30 дней</b></div>');
+    rows.push('<div class="orow"><span>Срок</span><b>'+(p.days||30)+' дней</b></div>');
     if(!p.fixed && d>INCLUDED) rows.push('<div class="orow"><span>Доплата за устройства</span><b>+'+((d-INCLUDED)*DEVICE_PRICE)+' ₽</b></div>');
     if(lvp && base>price) rows.push('<div class="orow"><span>Скидка уровня −'+fmtPct(lvp)+'%</span><b>−'+(base-price)+' ₽</b></div>');
     rows.push('<div class="orow tot"><span>Итого</span><b>'+price+' ₽</b></div>');
