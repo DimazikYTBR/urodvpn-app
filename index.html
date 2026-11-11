@@ -243,6 +243,11 @@ body.ing #v-menu{display:none}
 .tab svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .tab.on{color:var(--text);background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
 .tab.on svg{stroke:var(--cyan)}
+.dtk{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;border-radius:26px;margin-bottom:14px;border:1px solid var(--glass-b)}
+.dtl b{display:block;font-family:"Unbounded",sans-serif;font-size:15px;margin-bottom:4px}
+.dtl span{font-size:13px;color:var(--mute);line-height:1.4}
+.dtv{font-family:"Unbounded",sans-serif;font-weight:800;font-size:30px;color:var(--gold,#ffd36b);white-space:nowrap}
+.dtv::after{content:" 🪙";font-size:20px}
 #v-games{padding-bottom:calc(130px + var(--sab))}
 .gh{font-family:"Unbounded",sans-serif;font-weight:800;font-size:26px;margin:6px 4px 18px}
 .gban{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--glass-b);box-shadow:0 18px 44px -14px rgba(0,0,0,.7),0 0 36px -10px rgba(255,130,40,.45);background:#120a22}
@@ -489,8 +494,13 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
 </div>
 
 <main class="wrap" id="v-games" hidden>
-  <h2 class="gh">Игры</h2>
-  <section class="gban" id="gban">
+  <h2 class="gh">Игры и бонусы</h2>
+  <section class="dtk glass" aria-label="Скидочные токены">
+    <div class="dtl"><b>Скидочные токены</b><span>1% с каждой покупки возвращается токенами. 1 токен = 1 ₽, спишутся сами при оплате, до 50% цены.</span></div>
+    <div class="dtv" id="gdtv">0</div>
+  </section>
+
+  <section class="gban" id="gban" style="display:none">
     <img src="grobi-banner.jpg" alt="Копай Гробы" width="880" height="614">
     <div class="gtt">Копай<br>Гробы</div><div class="ghole"></div>
     <div class="gfly" id="gfly"></div>
@@ -498,9 +508,9 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
   </section>
   <section class="gban cb" id="gcatch">
     <div class="cfall" id="cfall"></div>
-    <div class="gbot"><div><b>Лови Токены</b><span>Награда за ловкость · раз в 4 часа</span></div><button class="gplay" id="cplay" type="button">Играть</button></div>
+    <div class="gbot"><div><b>Лови Токены</b><span>1 токен уровня за 5 монет · раз в 4 часа</span></div><button class="gplay" id="cplay" type="button">Играть</button></div>
   </section>
-  <section class="gban kb" id="gcase">
+  <section class="gban kb" id="gcase" style="display:none">
     <div class="kbox" id="kbox"></div>
     <div class="gbot"><div><b>Кейсы</b><span id="kbsub">Бесплатно раз в день · токены и попытки</span></div><button class="gplay" id="kplay" type="button">Открыть</button></div>
   </section>
@@ -752,7 +762,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
   }
   function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]}); }
   function esc2(t){ return esc(t); }
-  function renderMine(snap){
+  function renderMine(snap){ try{ var dv=document.getElementById("gdtv"); if(dv&&snap) dv.textContent=(snap.dtok||0).toString().replace(".",","); }catch(_){}
     var box=document.getElementById('mine'), st=document.getElementById('mSt'), body=document.getElementById('mBody');
     if(!snap) return;
     renderLevel(snap);
@@ -1235,7 +1245,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
     kTick();
   }
   function kTick(){ var w=Math.max(0,Math.round((kEnd-Date.now())/1000)); document.querySelectorAll('#kcases [data-t]').forEach(function(e){ e.textContent='через '+fmt(w); }); if(w<=0&&kSt&&kSt.cases.some(function(c){return !c.open})&&!kBusy) kLoad(); }
-  function kLoad(){
+  function kLoad(){ return;
     if(!inTG){ kSt={cases:[{id:'urod',name:'Урод Кейс',open:true}],wait:0}; kEnd=Date.now(); kRender(); return; }
     call('/api/case/state').then(function(j){ if(j&&j.ok){ kSt=j; kEnd=Date.now()+j.wait*1000; kRender(); } else { $('kcases').innerHTML='<p style="padding:20px;color:var(--mute)">Не удалось загрузить кейсы.</p>'; } })
       .catch(function(){ $('kcases').innerHTML='<p style="padding:20px;color:var(--mute)">Нет связи с сервером.</p>'; });
