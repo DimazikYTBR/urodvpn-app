@@ -777,7 +777,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
         '<div><b>'+(snap.gb? snap.gb+' ГБ':'∞')+'</b><span>трафик</span></div>'+
         '<div><b>'+snap.bal+' ₽</b><span>баланс</span></div></div>'+
         (snap.link? '<div class="linkbox"><code id="mLink">'+esc(snap.link)+'</code><button class="copy" id="mCopy" type="button">Копировать</button></div>'+
-        '<p class="tiny">Вставьте ссылку в приложение Happ или v2rayNG.</p>'
+        '<p class="tiny">Вставьте ссылку в приложение INCY, Happ или v2rayNG.</p>'
         : (snap.has_link ? '<button class="btn2 ghost" id="mGet" type="button">Получить ссылку в боте</button>':''));
       requestAnimationFrame(function(){ setTimeout(function(){ var b=document.getElementById('mBar'); if(b) b.style.width=pct+'%'; },250); });
       var cp=document.getElementById('mCopy');
@@ -875,7 +875,7 @@ html.hw .kgame{background:radial-gradient(100% 70% at 50% 0%,#5a2208,#0a0514 70%
       return '<div class="pok"><div class="pring" id="pring"><svg viewBox="0 0 100 100"><defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6df2b8"/><stop offset="1" stop-color="#5ee6ff"/></linearGradient></defs>'+
         '<circle class="rg" id="prg" cx="50" cy="50" r="44" stroke-dasharray="0 '+R+'"/><path class="ck" id="pck" d="M29 52l15 15 28-31" pathLength="60"/></svg></div>'+
         '<div class="pinfo" id="pinfo"><h3>Оплата прошла</h3>'+(rcp?'<div class="rid">ID чека <b>'+esc(rcp)+'</b></div>':'')+
-        (link?'<code>'+esc(link)+'</code><p class="sm">Вставьте ссылку в Happ или v2rayNG</p>':'<p class="sm">Доступ выдаётся, ссылка придёт в бот сообщением.</p>')+
+        (link?'<code>'+esc(link)+'</code><p class="sm">Вставьте ссылку в INCY, Happ или v2rayNG</p>':'<p class="sm">Доступ выдаётся, ссылка придёт в бот сообщением.</p>')+
         '<div class="pbtns">'+(link?'<button class="pc" id="pcopy" type="button">Скопировать</button>':'')+'<button class="pk" id="pdone" type="button">Хорошо</button></div></div></div>';
     }
     function finish(){ var j=document.getElementById('pdone'); if(!j) return;
